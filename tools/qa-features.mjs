@@ -12,6 +12,8 @@ async function page(w = 1440, extra = {}) {
   p.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errs.push(w + ' ' + m.text().slice(0, 200)); });
   p.on('pageerror', (e) => errs.push(w + ' pageerror ' + e.message));
   await p.goto(BASE + '/');
+  await p.waitForLoadState('load');
+  await p.evaluate(() => window.dispatchEvent(new Event('pointermove'))).catch(() => {});
   await p.waitForTimeout(1200);
   return { ctx, p };
 }

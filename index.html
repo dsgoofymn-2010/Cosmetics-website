@@ -108,6 +108,15 @@
   s.id = 'bn-preboot';
   s.textContent = 'html.bn-js{scrollbar-width:none}html.bn-js::-webkit-scrollbar{width:0}';
   document.documentElement.classList.add('bn-js');
+  /* lite devices (phones, small tablets, low memory): the intro plays its CSS
+     version and smooth scrolling stays native. Desktop is unchanged. */
+  var lite = false;
+  try {
+    lite = window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024 ||
+      window.innerWidth < 768 || (navigator.deviceMemory && navigator.deviceMemory <= 4);
+  } catch (e) {}
+  window.bnLite = !!lite;
+  if (lite) { document.documentElement.classList.add('bn-lite'); }
   var returning = false;
   try { returning = sessionStorage.getItem('bn-intro-played') === '1'; } catch (e) {}
   if (!returning) {
@@ -1087,7 +1096,7 @@ html.lb-open{overflow:hidden}
          Products are unbranded illustrations; each chip asks the shop about that shelf. -->
     <div class="hero-stage" id="heroStage">
       <div class="hero-stage-region" id="heroStageRegion">
-        <img class="hero-poster" id="heroPoster" src="images/hero-poster.webp" width="1400" height="1175" fetchpriority="high" decoding="async"
+        <img class="hero-poster" id="heroPoster" src="images/hero-poster.webp" width="1400" height="1183" fetchpriority="high" decoding="sync"
              alt="Illustrative still life of unbranded beauty products on an ivory and oak podium: a perfume, a serum dropper, an open lipstick, an open compact, a nail polish and a cream jar">
       </div>
       <canvas id="heroCanvas" aria-hidden="true"></canvas>
@@ -1866,7 +1875,7 @@ html.lb-open{overflow:hidden}
     } catch (e) { return false; }
   })();
 
-  if (!supportsWebGL) { cssFallback(); return; }
+  if (!supportsWebGL || window.bnLite) { cssFallback(); return; }
 
   /* ---------- WebGL scene: intro arch plus slow drifting particles ---------- */
   var THREE_ = window.THREE;
@@ -2825,6 +2834,7 @@ html.lb-open{overflow:hidden}
   var reduced = false;
   try { reduced = !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
   if (reduced) { return; } /* the intro module takes the overlay apart for RM anyway */
+  if (window.bnLite) { return; } /* lite devices: the button keeps its plain pill look, no goo canvas */
   /* EDIT: brand colours in VEN, feel in ADV, timings stay stock. */
   var VEN = {
     strands: 7,
@@ -3867,7 +3877,7 @@ html.lb-open{overflow:hidden}
   var hasLenis = !!window.Lenis;
   var lenis = null;
   /* gentle smoothing for mouse users only; touch and reduced motion stay native */
-  if (hasLenis && !RM && FINE_POINTER) {
+  if (hasLenis && !RM && FINE_POINTER && !window.bnLite) {
     try {
       lenis = new window.Lenis({ lerp: 0.14, smoothWheel: true });
       html.classList.add('lenis-on');

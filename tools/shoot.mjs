@@ -30,6 +30,8 @@ for (const w of widths) {
   const tag = (process.env.TAG ? process.env.TAG + '-' : '') + w;
   await page.waitForTimeout(400);
   await page.screenshot({ path: `${out}/${tag}-early.png` });
+  await page.waitForLoadState('load'); await page.evaluate(() => window.dispatchEvent(new Event('pointermove')));
+  if (w < 768) await page.evaluate(() => document.getElementById('heroStage').scrollIntoView({ block: 'center' }));
   await page.waitForFunction(() => document.getElementById('heroStage').classList.contains('is-ready') || document.getElementById('heroStage').classList.contains('is-static'), null, { timeout: 30000 }).catch(() => errors.push(w + ' stage never ready'));
   await page.waitForTimeout(2600);
   await page.screenshot({ path: `${out}/${tag}-live.png` });

@@ -3,7 +3,7 @@
    any error. The chips are real links in the HTML, so the WhatsApp enquiry
    works by keyboard and without this script. */
 import * as THREE from 'three';
-import { createRenderer, buildStage, computeFit, applyFit, PODIUM } from './stage-scene.js';
+import { createRenderer, buildStage, computeFit, applyFit, PODIUM, yieldToMain } from './stage-scene.js';
 
 const html = document.documentElement;
 const hero = document.getElementById('top');
@@ -18,6 +18,14 @@ if (posterEl) {
   const done = () => stageEl && stageEl.classList.add('poster-in');
   if (posterEl.complete && posterEl.naturalWidth) done(); else posterEl.addEventListener('load', done, { once: true });
 }
+
+/* first scroll, touch, pointer move or key press; listening starts at once so an
+   interaction during page load is never missed */
+const interacted = new Promise((res) => {
+  const evs = ['pointermove', 'pointerdown', 'touchstart', 'wheel', 'scroll', 'keydown'];
+  const go = () => { evs.forEach((e) => removeEventListener(e, go, true)); res(); };
+  evs.forEach((e) => addEventListener(e, go, { capture: true, passive: true }));
+});
 
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const COARSE = matchMedia('(pointer: coarse)').matches;
@@ -108,8 +116,23 @@ function whenIdle() {
   });
 }
 
+/* resolves once the stage is within reach of the viewport */
+function whenNear() {
+  return new Promise((res) => {
+    const io = new IntersectionObserver((en) => { if (en.some((e) => e.isIntersecting)) { io.disconnect(); res(); } }, { rootMargin: '300px 0px' });
+    io.observe(stageEl);
+  });
+}
+
+
 async function start() {
+  /* The poster is the first paint. The 3D scene loads after the page has loaded
+     and the visitor has interacted (a mouse move, a scroll, a tap or the intro's
+     Enter), so it never competes with first paint or with input. */
   await whenIdle();
+  await interacted;
+  /* phones: the stage sits below the fold, so it also waits until it is near */
+  if (LOW) await whenNear();
   const tier = LOW ? 'low' : 'high';
   const renderer = createRenderer(canvas, { tier });
   const stage = await buildStage(renderer, { tier, base: './' });
@@ -240,7 +263,9 @@ async function start() {
   /* compile every shader in parallel (KHR_parallel_shader_compile) before the first
      frame, so the first render does not block the main thread */
   applyFit(camera, stage, view, fit);
+  await yieldToMain();
   if (renderer.compileAsync) { try { await renderer.compileAsync(scene, camera); } catch (e) {} }
+  await yieldToMain();
 
   let live = false;
   function goLive() {

@@ -104,9 +104,16 @@ export function createRenderer(canvas, { tier, alpha = true, preserve = false })
   return renderer;
 }
 
+/* give the browser a turn between heavy steps, so setup never blocks input for long */
+export const yieldToMain = () => new Promise((r) => {
+  if (globalThis.scheduler && typeof globalThis.scheduler.yield === 'function') globalThis.scheduler.yield().then(r);
+  else setTimeout(r, 0);
+});
+
 /* Builds the whole scene. Resolves once every model is in place. */
 export async function buildStage(renderer, { tier = 'high', base = './' } = {}) {
   const scene = new THREE.Scene();
+  await yieldToMain();
   const pmrem = new THREE.PMREMGenerator(renderer);
   const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   pmrem.dispose();
@@ -130,8 +137,17 @@ export async function buildStage(renderer, { tier = 'high', base = './' } = {}) 
 
   const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
   const top = PODIUM.height;
-  const items = await Promise.all(PRODUCTS.map(async (p) => {
-    const gltf = await loader.loadAsync(base + 'models/' + p.file + '.glb');
+  /* fetch all files at once, then parse one model per task */
+  const buffers = await Promise.all(PRODUCTS.map((p) => fetch(base + 'models/' + p.file + '.glb').then((r) => {
+    if (!r.ok) throw new Error('model ' + p.file);
+    return r.arrayBuffer();
+  })));
+  const items = [];
+  for (let i = 0; i < PRODUCTS.length; i++) {
+    await yieldToMain();
+    items.push(await placeProduct(PRODUCTS[i], await loader.parseAsync(buffers[i], base + 'models/')));
+  }
+  async function placeProduct(p, gltf) {
     const model = gltf.scene;
     const holder = new THREE.Group();        /* placement */
     const lift = new THREE.Group();          /* hover lift and float */
@@ -150,7 +166,8 @@ export async function buildStage(renderer, { tier = 'high', base = './' } = {}) 
     holder.add(sh);
     model.traverse((o) => { if (o.isMesh) o.userData.productId = p.chipOf || p.id; });
     return { ...p, holder, lift, model, shadow: sh, height: size.y, home: holder.position.clone() };
-  }));
+  }
+  await yieldToMain();
 
   scene.updateMatrixWorld(true);
   /* fit points: every product's box corners plus the podium rim, top and bottom.

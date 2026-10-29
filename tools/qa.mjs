@@ -57,7 +57,8 @@ async function open(w, { base = DEV, extra = {}, init } = {}) {
   p.on('response', (r) => { if (r.status() >= 400) R.network.push(w + ' HTTP ' + r.status() + ' ' + r.url()); });
   return { ctx, p };
 }
-const ready = (p) => p.waitForFunction(() => { const s = document.getElementById('heroStage'); return s.classList.contains('is-ready') || s.classList.contains('is-static'); }, null, { timeout: 30000 });
+/* the 3D loads on first interaction, so tests poke the page first */
+const ready = async (p) => { await p.waitForLoadState('load'); await p.evaluate(() => window.dispatchEvent(new Event('pointermove'))).catch(() => {}); if ((p.viewportSize() || {}).width < 768) await p.evaluate(() => document.getElementById('heroStage').scrollIntoView({ block: 'center' })); return p.waitForFunction(() => { const s = document.getElementById('heroStage'); return s.classList.contains('is-ready') || s.classList.contains('is-static'); }, null, { timeout: 30000 }); };
 
 /* luminance of a list of points from a screenshot, 7x7 box mean, decoded in the page */
 async function lum(p, pts) {
@@ -278,6 +279,7 @@ await frameRun(390, 4);
   await p.goto(DEV + '/', { waitUntil: 'commit' });
   await p.waitForFunction(() => { const i = document.getElementById('heroPoster'); return i && i.complete && i.naturalWidth > 0; }, null, { timeout: 120000, polling: 100 });
   const tPoster = Date.now() - t0;
+  await p.waitForLoadState('load', { timeout: 240000 }); await p.evaluate(() => window.dispatchEvent(new Event('pointermove'))).catch(() => {}); await p.evaluate(() => document.getElementById('heroStage').scrollIntoView({ block: 'center' }));
   await p.screenshot({ path: `${OUT}/mode-slow3g-poster.png` });
   await p.waitForFunction(() => document.getElementById('heroStage').classList.contains('is-ready'), null, { timeout: 240000, polling: 200 });
   const tLive = Date.now() - t0;
