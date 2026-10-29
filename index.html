@@ -36,13 +36,28 @@
 <meta property="og:url" content="https://beauteandnutrie.com/">
 <meta name="twitter:card" content="summary_large_image">
 
-<!-- Favicon: inline SVG, brand red arch with B&N -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M8 62V38a24 23 0 0 1 48 0v24Z' fill='none' stroke='%23B3262E' stroke-width='6'/%3E%3Ctext x='32' y='49' font-family='Georgia,serif' font-size='16' fill='%23EBC9B6' text-anchor='middle'%3EB%26N%3C/text%3E%3C/svg%3E">
+<!-- Favicon set: brand red arch with B&N (same mark as before, now as files) -->
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 
-<!-- Fonts: Cormorant Garamond for display, DM Sans for body -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<!-- Fonts: Cormorant Garamond for display, DM Sans for body, self-hosted (latin subsets).
+     Noto Sans/Serif Tamil load only when Tamil text is on screen (unicode-range). -->
+<link rel="preload" href="fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cormorant-garamond-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/cormorant-garamond-latin-400-normal.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/cormorant-garamond-latin-500-normal.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/cormorant-garamond-latin-600-normal.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400;font-display:swap;src:url("fonts/cormorant-garamond-latin-400-italic.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/dm-sans-latin-400-normal.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/dm-sans-latin-500-normal.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Noto Sans Tamil";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/noto-sans-tamil-tamil-400-normal.woff2") format("woff2");unicode-range:U+0964-0965, U+0B82-0BFA, U+200C-200D, U+20B9, U+25CC}
+@font-face{font-family:"Noto Sans Tamil";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/noto-sans-tamil-tamil-500-normal.woff2") format("woff2");unicode-range:U+0964-0965, U+0B82-0BFA, U+200C-200D, U+20B9, U+25CC}
+@font-face{font-family:"Noto Serif Tamil";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/noto-serif-tamil-tamil-500-normal.woff2") format("woff2");unicode-range:U+0964-0965, U+0B82-0BFA, U+200C-200D, U+20B9, U+25CC}
+</style>
 
 <!-- Hero stage: poster first, then the 3D modules (pinned, self-hosted) -->
 <link rel="preload" as="image" href="images/hero-poster.webp" fetchpriority="high">
@@ -104,6 +119,7 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"><span></span></div>
 
 <!-- ---------------- INTRO OVERLAY ----------------
      Injected statically so the first paint is the intro, not a flash of the page.
@@ -913,6 +929,107 @@ html.bn-js.bn-returning #heroBadge{
 .like-link:hover{color:var(--peach); border-color:var(--peach)}
 /* reduced motion: cursor disabled; intro performs a 500ms crossfade only */
 @media (prefers-reduced-motion:reduce){.cursor{display:none!important}}
+
+/* ============================================================
+   Additions: language toggle, progress, dots, guide, open chip,
+   lightbox, map card, Tamil type
+   ============================================================ */
+/* Tamil: the Latin faces have no Tamil glyphs, so Noto takes over for those characters */
+html[lang="ta"] body{font-family:"DM Sans","Noto Sans Tamil","Nirmala UI","Tamil Sangam MN",system-ui,sans-serif}
+html[lang="ta"] .display{font-family:"Cormorant Garamond","Noto Serif Tamil","Noto Sans Tamil","Nirmala UI",Georgia,serif; letter-spacing:0}
+html[lang="ta"] .ups{letter-spacing:.06em; text-transform:none}
+html[lang="ta"] .hero h1{font-size:clamp(2.4rem,6vw,5.2rem); line-height:1.25}
+html[lang="ta"] .h2{line-height:1.3}
+/* Tamil has no true italic: keep it upright instead of a fake slant */
+html[lang="ta"] .hero h1 em{font-style:normal}
+
+.lang{display:inline-flex; align-items:center; border:1px solid rgba(251,246,240,.35); border-radius:10px; padding:2px}
+.lang-btn{min-height:40px; min-width:44px; padding:6px 10px; border-radius:8px; font-size:.82rem; letter-spacing:.04em; color:rgba(251,246,240,.82)}
+.lang-btn[lang="ta"]{font-family:"Noto Sans Tamil","Nirmala UI",sans-serif}
+.lang-btn[aria-pressed="true"]{background:var(--ivory); color:var(--ink-on-light)}
+.lang-btn:hover{color:var(--ivory)}
+.lang-btn[aria-pressed="true"]:hover{color:var(--ink-on-light)}
+@media (max-width:480px){
+  .hd-call{padding:0; width:44px; height:44px; justify-content:center}
+  .hd-call-num{display:none}
+  .hd-call svg{width:17px; height:17px}
+  .hd-nav{gap:8px}
+}
+
+/* scroll progress: one hairline in peach at the very top */
+.progress{position:fixed; inset:0 0 auto; height:2px; z-index:1001; pointer-events:none}
+.progress>span{display:block; height:100%; background:var(--peach); transform:scaleX(0); transform-origin:0 50%}
+
+/* section dots, desktop only */
+.dots{position:fixed; right:14px; top:50%; transform:translateY(-50%); z-index:900; display:none; flex-direction:column; gap:2px}
+@media (min-width:1100px) and (pointer:fine){.dots{display:flex}}
+.dot{position:relative; display:grid; place-items:center; width:28px; height:28px}
+.dot::before{content:""; width:8px; height:8px; border-radius:50%; border:1px solid rgba(251,246,240,.75);
+  box-shadow:0 0 0 1px rgba(20,9,12,.35); transition:background .2s, transform .2s}
+.dot[aria-current="true"]::before{background:var(--peach); border-color:var(--peach); transform:scale(1.25)}
+.dot:hover::before{background:rgba(251,246,240,.6)}
+.dots.on-light .dot::before{border-color:var(--ink-on-light); box-shadow:0 0 0 1px rgba(251,246,240,.5)}
+.dots.on-light .dot[aria-current="true"]::before{background:var(--red); border-color:var(--red)}
+.dot-label{position:absolute; right:34px; top:50%; transform:translate(6px,-50%); opacity:0; pointer-events:none; white-space:nowrap;
+  padding:6px 10px; border-radius:8px; background:var(--ivory); color:var(--ink-on-light); font-size:.8rem; transition:opacity .2s, transform .2s}
+.dot:hover .dot-label,.dot:focus-visible .dot-label{opacity:1; transform:translate(0,-50%)}
+
+/* find your shelf: text left, the card right, on its own darker band */
+.sguide{background:var(--bg-2); padding:clamp(72px,10vw,130px) var(--margin)}
+.sguide-grid{width:min(1320px,100%); margin-inline:auto; display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:clamp(32px,6vw,90px); align-items:start}
+.sguide .sec-sub{margin-top:20px; max-width:46ch; color:rgba(251,246,240,.84)}
+.guide-card{background:var(--card); border:1px solid var(--edge); border-radius:var(--radius); padding:clamp(22px,3.4vw,40px); min-height:360px}
+.guide-step{font-size:var(--fs-small); color:var(--peach); letter-spacing:.06em; margin-bottom:10px}
+.guide-q{border:0; margin:0; padding:0; min-width:0}
+.guide-q legend{font-size:var(--fs-h3); line-height:1.25; padding:0; margin-bottom:22px}
+.guide-q legend:focus,.guide-result h3:focus{outline:none}
+.guide-opts{display:flex; flex-wrap:wrap; gap:10px}
+.guide-opt{min-height:48px; padding:12px 18px; border-radius:10px; border:1px solid rgba(251,246,240,.3); background:transparent;
+  color:var(--ivory); font-size:.98rem; text-align:left; transition:background .2s, border-color .2s, color .2s}
+.guide-opt:hover{border-color:var(--ivory); background:rgba(251,246,240,.06)}
+.guide-opt[aria-pressed="true"]{background:var(--ivory); color:var(--ink-on-light); border-color:var(--ivory)}
+.guide-result h3{font-size:var(--fs-h2); line-height:1.12; margin:10px 0 14px}
+.guide-result p{color:rgba(251,246,240,.86); max-width:48ch}
+.guide-result #guideGift{margin-top:8px}
+.guide-actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px}
+.guide-back{margin-top:22px; min-height:44px; padding:8px 2px; color:var(--peach); font-size:var(--fs-small); letter-spacing:.06em;
+  text-decoration:underline; text-underline-offset:4px}
+.guide-nojs a{color:var(--peach); text-decoration:underline}
+@media (max-width:860px){.sguide-grid{grid-template-columns:1fr}}
+@media (max-width:480px){.guide-opt{width:100%}}
+
+/* open-now chip: the dot marks the real state, no glow, no pulse */
+.open-chip{display:inline-flex; align-items:center; gap:8px; margin-top:10px; padding:6px 12px; border-radius:8px;
+  background:rgba(251,246,240,.08); font-size:var(--fs-small); color:var(--ivory)}
+.open-dot{width:8px; height:8px; border-radius:50%; background:var(--oak)}
+.open-chip[data-state="open"] .open-dot{background:#6FCF8A}
+.open-chip[data-state="closed"] .open-dot{background:#E08A8F}
+
+/* map card shown until the visitor asks for the Google map */
+.map-ask{position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:16px; text-align:center; padding:32px; background:var(--card)}
+.map-ask[hidden]{display:none}
+.map-ask p{max-width:40ch; color:rgba(251,246,240,.8)}
+.map-ask-row{display:flex; flex-wrap:wrap; gap:12px; justify-content:center}
+
+/* lightbox: the photo at its own size at most, never cropped */
+img[data-lightbox]{cursor:zoom-in}
+.lb{border:0; padding:0; margin:0; width:100vw; height:100vh; max-width:none; max-height:none; background:rgba(14,6,8,.94); color:var(--ivory)}
+.lb::backdrop{background:rgba(14,6,8,.6)}
+html.lb-open{overflow:hidden}
+.lb-fig{height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:64px 72px 28px}
+.lb-img{max-height:calc(100vh - 150px); width:auto; height:auto; object-fit:contain; border-radius:6px}
+.lb-cap{display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; max-width:64ch; font-size:var(--fs-small); color:rgba(251,246,240,.82)}
+.lb-count{color:var(--peach); letter-spacing:.06em}
+.lb-btn{position:fixed; width:48px; height:48px; border-radius:50%; display:grid; place-items:center; background:rgba(251,246,240,.1); color:var(--ivory)}
+.lb-btn:hover{background:rgba(251,246,240,.2)}
+.lb-btn svg{width:22px; height:22px}
+.lb-close{top:14px; right:14px}
+.lb-prev{left:14px; top:50%; transform:translateY(-50%)}
+.lb-next{right:14px; top:50%; transform:translateY(-50%)}
+.lb-btn[hidden]{display:none}
+@media (max-width:640px){.lb-fig{padding:64px 12px 84px}.lb-img{max-height:calc(100vh - 230px)}.lb-prev,.lb-next{top:auto; bottom:14px; transform:none}}
+@media (prefers-reduced-motion:reduce){.dot::before,.dot-label,.guide-opt{transition:none}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -937,8 +1054,12 @@ html.bn-js.bn-returning #heroBadge{
     <a class="hd-link" href="#collections">Collections</a>
     <a class="hd-link" href="#experience">Experience</a>
     <a class="hd-link" href="#reviews">Reviews</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" class="lang-btn" data-lang="ta" lang="ta" aria-pressed="false">தமிழ்</button>
+    </div>
     <a class="hd-call" href="tel:+919355591909" aria-label="Call the shop on 093555 91909">
-      <svg aria-hidden="true"><use href="#i-tel"/></svg>093555 91909</a>
+      <svg aria-hidden="true"><use href="#i-tel"/></svg><span class="hd-call-num">093555 91909</span></a>
   </nav>
 </header>
 
@@ -971,12 +1092,12 @@ html.bn-js.bn-returning #heroBadge{
       </div>
       <canvas id="heroCanvas" aria-hidden="true"></canvas>
       <div class="hero-chips" role="group" aria-label="Ask the shop about these shelves">
-        <a class="stage-chip" data-product="perfume" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Personal%20Care.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Perfume: ask the shop about </span>Personal Care</a>
-        <a class="stage-chip" data-product="serum" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Skincare.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Serum: ask the shop about </span>Skincare</a>
-        <a class="stage-chip" data-product="lipstick" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Lipstick: ask the shop about </span>Makeup</a>
-        <a class="stage-chip" data-product="compact" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Compact: ask the shop about </span>Makeup</a>
-        <a class="stage-chip" data-product="nail-polish" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Nail polish: ask the shop about </span>Makeup</a>
-        <a class="stage-chip" data-product="cream-jar" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Skincare.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Cream jar: ask the shop about </span>Skincare</a>
+        <a class="stage-chip" data-product="perfume" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Personal%20Care.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only" lang="en">Perfume: ask the shop about </span>Personal Care</a>
+        <a class="stage-chip" data-product="serum" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Skincare.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only" lang="en">Serum: ask the shop about </span>Skincare</a>
+        <a class="stage-chip" data-product="lipstick" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only" lang="en">Lipstick: ask the shop about </span>Makeup</a>
+        <a class="stage-chip" data-product="compact" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only" lang="en">Compact: ask the shop about </span>Makeup</a>
+        <a class="stage-chip" data-product="nail-polish" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only" lang="en">Nail polish: ask the shop about </span>Makeup</a>
+        <a class="stage-chip" data-product="cream-jar" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Skincare.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only" lang="en">Cream jar: ask the shop about </span>Skincare</a>
       </div>
     </div>
     <p class="hero-scroll" aria-hidden="true">Scroll</p>
@@ -1000,7 +1121,7 @@ html.bn-js.bn-returning #heroBadge{
     </div>
     <div class="archstage">
       <figure class="archexp" id="archExp" data-lqip="sf">
-        <img id="sfImg" src="images/store-front-clean.jpg" width="1118" height="621"
+        <img id="sfImg" data-lightbox src="images/store-front-clean.jpg" width="1118" height="621"
              alt="The red BEAUTE and NUTRIE facade with a glowing white wordmark above the arched shop entrance"
              fetchpriority="high" decoding="async">
         <figcaption class="arch-exp-cap" style="margin-top:20px;font-size:var(--fs-small);color:rgba(251,246,240,.7);text-align:center;letter-spacing:.06em">Inside VR Chennai &middot; Ground Floor &middot; Shop No. G-30</figcaption>
@@ -1154,11 +1275,69 @@ html.bn-js.bn-returning #heroBadge{
   </section>
 
   <!-- ============ EXPERIENCE (light field) ============ -->
+  <!-- ============ FIND YOUR SHELF ============
+       Three taps, all in the browser. Ends with a shelf (never a product or brand)
+       and a WhatsApp message carrying the answers. -->
+  <section class="sguide" id="shelf-guide" aria-labelledby="sguideTitle">
+    <div class="sguide-grid">
+      <div class="sec-head">
+        <p class="ups" style="color:var(--peach)">Find your shelf</p>
+        <h2 class="h2 display" id="sguideTitle" style="margin-top:12px">Not sure where to start? Three questions.</h2>
+        <p class="sec-sub">Tap through and you get the shelf to start at. Send your answers to the counter on WhatsApp, so they know what you are after before you arrive.</p>
+      </div>
+      <div class="guide-card">
+        <p class="guide-nojs">The guide needs JavaScript. You can still <a href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20Could%20you%20help%20me%20find%20the%20right%20shelf%3F" target="_blank" rel="noopener">ask the counter on WhatsApp</a>.</p>
+        <div class="guide" id="guide" hidden>
+          <p class="guide-step" aria-live="polite">Question 1 of 3</p>
+          <fieldset class="guide-q">
+            <legend class="display" data-i18n="guide.q1">What are you looking for?</legend>
+            <div class="guide-opts">
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Colour for face, eyes or lips" data-shelf="Makeup">Colour for face, eyes or lips</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="A skin routine" data-shelf="Skincare">A skin routine</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Something for hair" data-shelf="Haircare">Something for hair</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Shaving and grooming" data-shelf="Men's Grooming">Shaving and grooming</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Everyday essentials" data-shelf="Personal Care">Everyday essentials</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="A present for someone" data-shelf="Gifting">A present for someone</button>
+            </div>
+          </fieldset>
+          <fieldset class="guide-q" hidden>
+            <legend class="display" data-i18n="guide.q2">Who is it for?</legend>
+            <div class="guide-opts">
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Me">Me</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Someone else">Someone else</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Him">Him</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Not sure yet">Not sure yet</button>
+            </div>
+          </fieldset>
+          <fieldset class="guide-q" hidden>
+            <legend class="display" data-i18n="guide.q3">How much guidance do you want?</legend>
+            <div class="guide-opts">
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Just point me to the shelf">Just point me to the shelf</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="A quick suggestion">A quick suggestion</button>
+              <button type="button" class="guide-opt" aria-pressed="false" data-value="Walk me through it at the counter">Walk me through it at the counter</button>
+            </div>
+          </fieldset>
+          <div class="guide-result" hidden aria-live="polite">
+            <p class="ups" data-i18n="guide.start">Start here</p>
+            <h3 class="display" id="guideShelf"></h3>
+            <p id="guideLine"></p>
+            <p id="guideGift" hidden></p>
+            <div class="guide-actions">
+              <a class="btn btn-solid" id="guideSend" href="https://wa.me/919355591909" target="_blank" rel="noopener"><span data-i18n="guide.send">Send my answers on WhatsApp</span><svg aria-hidden="true"><use href="#i-wa"/></svg></a>
+              <button type="button" class="btn btn-ghost" id="guideAgain" data-i18n="guide.again">Start again</button>
+            </div>
+          </div>
+          <button type="button" class="guide-back" hidden data-i18n="guide.back">Back</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="exp" id="experience" aria-label="The experience inside the shop">
     <div class="exp-grid">
       <div class="exp-photo">
         <figure class="exp-frame" data-lqip="vm">
-          <img src="images/vanity-mirror.jpg" width="378" height="742" loading="lazy" decoding="async"
+          <img data-lightbox src="images/vanity-mirror.jpg" width="378" height="742" loading="lazy" decoding="async"
                alt="An arched LED mirror glowing over a wooden beauty counter with stools">
         </figure>
       </div>
@@ -1199,7 +1378,7 @@ html.bn-js.bn-returning #heroBadge{
         </div>
       </div>
       <figure class="mens-photo" data-lqip="ms">
-        <img id="mensImg" src="images/mens-section.jpg" width="378" height="739" loading="lazy" decoding="async"
+        <img id="mensImg" data-lightbox src="images/mens-section.jpg" width="378" height="739" loading="lazy" decoding="async"
              alt="A portrait view of the men's grooming section, with wooden shelves and care products">
       </figure>
     </div>
@@ -1357,7 +1536,7 @@ html.bn-js.bn-returning #heroBadge{
           <div class="visit-item rv">
             <svg aria-hidden="true"><use href="#i-pin"/></svg>
             <div>
-              <b>Address</b>
+              <b data-i18n="visit.address">Address</b>
               <p>Shop No. G-30, VR Mall #44, Pillaiyar Koil Street, Jawaharlal Nehru Salai, Anna Nagar, Chennai, Tamil Nadu 600040</p>
               <a href="https://www.google.com/maps/dir/?api=1&amp;destination=BEAUTE%26NUTRIE%2C+Shop+No.+G-30%2C+VR+Mall+%2344%2C+Pillaiyar+Koil+Street%2C+Anna+Nagar%2C+Chennai+600040" target="_blank" rel="noopener">Open route in Google Maps<svg aria-hidden="true" style="width:15px;height:15px"><use href="#i-arrow"/></svg></a>
             </div>
@@ -1365,8 +1544,10 @@ html.bn-js.bn-returning #heroBadge{
           <div class="visit-item rv">
             <svg aria-hidden="true"><use href="#i-clock"/></svg>
             <div>
-              <b>Hours</b>
-              <p>Open daily &middot; Closes 10 PM<span data-open-slot></span></p>
+              <b data-i18n="visit.hours">Hours</b>
+              <p>Open daily<span data-open-slot></span></p>
+              <!-- live status from SITE.openingTime / closingTime, India time -->
+              <p class="open-chip" data-open-chip><span class="open-dot" aria-hidden="true"></span><span class="open-txt">Closes 10 PM</span></p>
             </div>
           </div>
           <div class="visit-item rv">
@@ -1377,11 +1558,28 @@ html.bn-js.bn-returning #heroBadge{
               <a href="https://www.google.com/maps/search/35JW%2B7P+Chennai" target="_blank" rel="noopener">Open the plus code<svg aria-hidden="true" style="width:15px;height:15px"><use href="#i-arrow"/></svg></a>
             </div>
           </div>
+          <div class="visit-item rv">
+            <svg aria-hidden="true"><use href="#i-tel"/></svg>
+            <div>
+              <b data-i18n="visit.saveLabel">Contact card</b>
+              <p>Name, phone and address in one file for your phone's contacts.</p>
+              <a href="beaute-nutrie.vcf" download="BEAUTE-NUTRIE.vcf" type="text/vcard"><span data-i18n="visit.save">Save our contact</span><svg aria-hidden="true" style="width:15px;height:15px"><use href="#i-plus"/></svg></a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="map-shell" id="mapShell">
-        <!-- Map loads only when scrolled near; a skeleton calms the wait, and if it cannot load
-             (offline or file://), the styled fallback card below shows instead of a dead grey box. -->
+        <!-- The Google map is click-to-load: nothing from Google (and none of its cookies)
+             reaches the visitor until they ask for the map. Until then the card below shows. -->
+        <div class="map-ask" id="mapAsk">
+          <div class="map-art"><svg aria-hidden="true"><use href="#i-pin"/></svg></div>
+          <h3 class="display">Ground Floor, VR Chennai</h3>
+          <p>Shop No. G-30, Anna Nagar. Showing the map here loads Google Maps, which may set its own cookies.</p>
+          <div class="map-ask-row">
+            <a class="btn btn-solid" href="https://www.google.com/maps/dir/?api=1&amp;destination=BEAUTE%26NUTRIE%2C+Shop+No.+G-30%2C+VR+Mall+%2344%2C+Pillaiyar+Koil+Street%2C+Anna+Nagar%2C+Chennai+600040" target="_blank" rel="noopener">Open in Google Maps<svg aria-hidden="true"><use href="#i-pin"/></svg></a>
+            <button type="button" class="btn btn-ghost" id="mapLoad"><span data-i18n="map.load">Show the map here</span></button>
+          </div>
+        </div>
         <div class="map-skel" id="mapSkel" aria-hidden="true">
           <span class="msk-arch"></span>
           <span class="msk-line msk-line-1"></span>
@@ -1426,6 +1624,7 @@ html.bn-js.bn-returning #heroBadge{
           <li><a href="https://wa.me/919355591909" target="_blank" rel="noopener">WhatsApp 093555 91909</a></li>
           <li><a href="tel:+919355591909">Call 093555 91909</a></li>
           <li><span data-open-slot-para>Open daily, closes 10 PM</span></li>
+          <li><a href="beaute-nutrie.vcf" download="BEAUTE-NUTRIE.vcf" type="text/vcard">Save our contact</a></li>
           <!-- EDIT: paste the shop's Instagram profile URL inside href, or remove this line -->
           <li><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram<svg style="width:15px;height:15px" aria-hidden="true"><use href="#i-insta"/></svg></a></li>
         </ul>
@@ -1588,6 +1787,8 @@ html.bn-js.bn-returning #heroBadge{
 
   function onSkip(e) {
     if (e && e.type === 'keydown' && e.key !== 'Escape') { return; }
+    /* once the intro is gone, Esc belongs to the page (lightbox, dialogs) */
+    if (e && e.type === 'keydown' && !(overlay && overlay.isConnected)) { return; }
     /* Only teardown immediately when no God Mode transition will take over */
     if (!html.classList.contains('bn-transition-active')) { teardown(); }
     finish(true);
@@ -3597,8 +3798,18 @@ html.bn-js.bn-returning #heroBadge{
   var SITE = {
     waPhone: '919355591909',      /* EDIT: WhatsApp number, digits only */
     telDisplay: '093555 91909',
-    openingTime: ''               /* EDIT: shop opening time, e.g. '10 AM'. Leave '' to omit. */
+    openingTime: '',              /* EDIT: opening time, 24-hour 'HH:MM', e.g. '10:00'. Leave '' if unknown. */
+    closingTime: '22:00'          /* closes 10 PM, India time */
   };
+  /* "10:00" -> "10 AM", "10:30" -> "10:30 AM" */
+  function niceTime(hhmm) {
+    var m = /^(\d{1,2}):(\d{2})$/.exec(hhmm || '');
+    if (!m) { return hhmm; }
+    var h = +m[1], ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + (m[2] === '00' ? '' : ':' + m[2]) + ' ' + ap;
+  }
+  window.bnSite = { waPhone: SITE.waPhone, openingTime: SITE.openingTime, closingTime: SITE.closingTime };
   var BRAND = 'BEAUTE&NUTRIE';
   var DIRECTIONS = 'https://www.google.com/maps/dir/?api=1&destination=' +
     encodeURIComponent('BEAUTE&NUTRIE, Shop No. G-30, VR Mall #44, Pillaiyar Koil Street, Jawaharlal Nehru Salai, Anna Nagar, Chennai 600040');
@@ -3623,7 +3834,8 @@ html.bn-js.bn-returning #heroBadge{
   function fillOpenSlots() {
     $$('[data-open-slot],[data-open-slot-para]').forEach(function (el) {
       var span = document.createElement('span');
-      span.textContent = SITE.openingTime ? (el.hasAttribute('data-open-slot') ? ' \u00B7 Opens ' + SITE.openingTime : ', opens ' + SITE.openingTime) : '';
+      var ot = niceTime(SITE.openingTime);
+      span.textContent = SITE.openingTime ? (el.hasAttribute('data-open-slot') ? ' \u00B7 Opens ' + ot : ', opens ' + ot) : '';
       el.appendChild(span);
     });
   }
@@ -3950,11 +4162,16 @@ html.bn-js.bn-returning #heroBadge{
         if (frame.style.opacity !== '1') { showFallback(); }
       }, 3600);
     }
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es, io2) {
-        es.forEach(function (en) { if (en.isIntersecting) { io2.disconnect(); buildMap(); } });
-      }, { rootMargin: '600px' }).observe(shell);
-    } else { buildMap(); }
+    /* click-to-load: the card stays until the visitor asks for the map */
+    var ask = $('#mapAsk'), loadBtn = $('#mapLoad');
+    markReady();
+    if (loadBtn) {
+      loadBtn.addEventListener('click', function () {
+        shell.classList.remove('ready');
+        if (ask) { ask.hidden = true; }
+        buildMap();
+      });
+    }
   })();
 
   /* ---------- enquiry form: client only, opens WhatsApp ---------- */
@@ -4082,6 +4299,8 @@ html.bn-js.bn-returning #heroBadge{
   })();
 })();
 </script>
+<script src="js/i18n.js" defer></script>
+<script src="js/extras.js" defer></script>
 <script type="module" src="js/hero-stage.js"></script>
 </body>
 </html>

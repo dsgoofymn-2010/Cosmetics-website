@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /tools/
+
+# EDIT: change the domain if the site lives somewhere else
+Sitemap: https://beauteandnutrie.com/sitemap.xml

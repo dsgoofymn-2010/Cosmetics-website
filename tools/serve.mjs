@@ -9,6 +9,16 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.argv[2] || 4173);
 const KBPS = Number(process.env.THROTTLE_KBPS || 0);
+/* apply vercel.json headers locally so QA sees the same CSP and caching */
+let VH = [];
+try { VH = JSON.parse(await readFile(join(ROOT, 'vercel.json'), 'utf8')).headers || []; } catch {}
+function vercelHeaders(path) {
+  const out = {};
+  for (const rule of VH) {
+    if (new RegExp('^' + rule.source + '$').test(path)) for (const h of rule.headers) out[h.key] = h.value;
+  }
+  return out;
+}
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css',
   '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.glb': 'model/gltf-binary',
@@ -35,7 +45,7 @@ createServer(async (req, res) => {
     const rel = normalize(path).replace(/\\/g, '/').replace(/^\/+/, '');
     if (rel.startsWith('..') || !(await exactCase(rel))) throw new Error('404');
     const body = await readFile(join(ROOT, rel));
-    res.writeHead(200, { 'Content-Type': TYPES[extname(rel)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
+    res.writeHead(200, { 'Content-Type': TYPES[extname(rel)] || 'application/octet-stream', ...vercelHeaders('/' + rel), 'Cache-Control': 'no-store' });
     if (!KBPS) return res.end(body);
     const chunk = Math.max(1024, Math.round(KBPS * 1024 / 10));
     for (let i = 0; i < body.length; i += chunk) {
