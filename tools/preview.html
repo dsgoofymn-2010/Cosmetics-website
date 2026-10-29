@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model preview</title>
+<style>html,body{margin:0;height:100%;background:#8a8580}canvas{display:block;width:100vw;height:100vh}</style>
+<script type="importmap">
+{ "imports": {
+  "three": "../vendor/three@0.186.1/three.module.js",
+  "three/addons/": "../vendor/three@0.186.1/addons/"
+} }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+/* Neutral studio preview of one model: ?m=perfume&yaw=20 */
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { fixMaterials } from '../js/stage-materials.js';
+
+const q = new URLSearchParams(location.search);
+const name = q.get('m') || 'perfume';
+const yaw = THREE.MathUtils.degToRad(Number(q.get('yaw') || 25));
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight, false);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#8a8580');
+const pm = new THREE.PMREMGenerator(renderer);
+scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+const key = new THREE.DirectionalLight('#fff1e2', 2.2); key.position.set(3, 5, 4); scene.add(key);
+const rim = new THREE.DirectionalLight('#ffc6cf', 1.4); rim.position.set(-4, 2.5, -3); scene.add(rim);
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.01, 50);
+
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+loader.load('../models/' + name + '.glb', (gltf) => {
+  const obj = gltf.scene;
+  fixMaterials(obj, { tier: q.get('tier') || 'high' });
+  obj.rotation.y = yaw;
+  scene.add(obj);
+  const box = new THREE.Box3().setFromObject(obj);
+  const sphere = box.getBoundingSphere(new THREE.Sphere());
+  const dist = sphere.radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.08;
+  camera.position.set(sphere.center.x, sphere.center.y + dist * 0.22, sphere.center.z + dist);
+  camera.lookAt(sphere.center);
+  renderer.render(scene, camera);
+  requestAnimationFrame(() => { renderer.render(scene, camera); document.body.dataset.ready = '1'; });
+}, undefined, (e) => { document.body.dataset.ready = 'error'; console.error(e); });
+</script>
+</body>
+</html>
