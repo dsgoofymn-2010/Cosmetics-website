@@ -475,7 +475,7 @@ html.bn-js.bn-returning #heroBadge{
 .hero-stage.poster-in .hero-stage-region::before{opacity:0}
 .hero-poster{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; transition:opacity .7s var(--ease)}
 #heroCanvas{position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0;
-  transition:opacity .7s var(--ease); touch-action:pan-y; pointer-events:none}
+  transition:opacity .7s var(--ease); touch-action:pan-y; pointer-events:none; user-select:none; -webkit-user-select:none}
 .hero-stage.is-live #heroCanvas{pointer-events:auto}
 .hero-stage.is-ready #heroCanvas{opacity:1}
 .hero-stage.is-ready .hero-poster,.hero-stage.is-ready .hero-stage-region::before{opacity:0}
@@ -532,7 +532,7 @@ html.bn-js.bn-returning #heroBadge{
   background:linear-gradient(var(--peach),transparent); animation:drift 2.2s var(--ease) infinite}
 @keyframes drift{0%{transform:scaleY(.2); transform-origin:top}50%{transform:scaleY(1)}100%{transform:scaleY(.2); transform-origin:bottom}}
 @media (max-width:767px){
-  .hero{min-height:auto; padding-top:96px; padding-bottom:116px; flex-direction:column; align-items:stretch}
+  .hero{min-height:auto; padding-top:96px; padding-bottom:48px; flex-direction:column; align-items:stretch}
   .hero-copy{max-width:100%; transform:none}
   .hero-sub{max-width:56ch}
   /* stage sits under the text block, full bleed, nothing overlaps the copy */
@@ -1123,7 +1123,7 @@ html.lb-open{overflow:hidden}
       <figure class="archexp" id="archExp" data-lqip="sf">
         <img id="sfImg" data-lightbox src="images/store-front-clean.jpg" width="1118" height="621"
              alt="The red BEAUTE and NUTRIE facade with a glowing white wordmark above the arched shop entrance"
-             fetchpriority="high" decoding="async">
+             loading="lazy" decoding="async">
         <figcaption class="arch-exp-cap" style="margin-top:20px;font-size:var(--fs-small);color:rgba(251,246,240,.7);text-align:center;letter-spacing:.06em">Inside VR Chennai &middot; Ground Floor &middot; Shop No. G-30</figcaption>
       </figure>
     </div>
@@ -1159,7 +1159,7 @@ html.lb-open{overflow:hidden}
                   <!-- EDIT: AI image slot: drop images/card-makeup.webp + .jpg when generated; see images/ai-prompts.md -->
                   <span class="slot-img"><picture>
                     <source type="image/webp" srcset="images/card-makeup.webp">
-                    <img src="images/card-makeup.jpg" alt="Illustrative makeup still life, unbranded lipsticks, an open palette and brushes on a curved plinth in an arched niche" width="1200" height="1500" decoding="async">
+                    <img loading="lazy" src="images/card-makeup.jpg" alt="Illustrative makeup still life, unbranded lipsticks, an open palette and brushes on a curved plinth in an arched niche" width="1200" height="1500" decoding="async">
                   </picture></span>
                   <span class="slot-tag" aria-hidden="true">Illustrative image</span>
                 </figure>
@@ -1179,7 +1179,7 @@ html.lb-open{overflow:hidden}
                   <!-- EDIT: AI image slot: drop images/card-skincare.webp + .jpg when generated; see images/ai-prompts.md -->
                   <span class="slot-img"><picture>
                     <source type="image/webp" srcset="images/card-skincare.webp">
-                    <img src="images/card-skincare.jpg" alt="Illustrative skincare still life, unbranded serum dropper, cream jar and pump bottle on an oak slab" width="1200" height="1500" decoding="async">
+                    <img loading="lazy" src="images/card-skincare.jpg" alt="Illustrative skincare still life, unbranded serum dropper, cream jar and pump bottle on an oak slab" width="1200" height="1500" decoding="async">
                   </picture></span>
                   <span class="slot-tag" aria-hidden="true">Illustrative image</span>
                 </figure>
@@ -1199,7 +1199,7 @@ html.lb-open{overflow:hidden}
                   <!-- EDIT: AI image slot: drop images/card-haircare.webp + .jpg when generated; see images/ai-prompts.md -->
                   <span class="slot-img"><picture>
                     <source type="image/webp" srcset="images/card-haircare.webp">
-                    <img src="images/card-haircare.jpg" alt="Illustrative haircare still life, unbranded shampoo and conditioner bottles with a wooden comb on a wine-coloured drape" width="1200" height="1500" decoding="async">
+                    <img loading="lazy" src="images/card-haircare.jpg" alt="Illustrative haircare still life, unbranded shampoo and conditioner bottles with a wooden comb on a wine-coloured drape" width="1200" height="1500" decoding="async">
                   </picture></span>
                   <span class="slot-tag" aria-hidden="true">Illustrative image</span>
                 </figure>
@@ -1239,7 +1239,7 @@ html.lb-open{overflow:hidden}
                   <!-- EDIT: AI image slot: drop images/card-personalcare.webp + .jpg when generated; see images/ai-prompts.md -->
                   <span class="slot-img"><picture>
                     <source type="image/webp" srcset="images/card-personalcare.webp">
-                    <img src="images/card-personalcare.jpg" alt="Illustrative personal care still life, unbranded body wash, soap bar, loofah and folded towel on a pale oak shelf" width="1200" height="1500" decoding="async">
+                    <img loading="lazy" src="images/card-personalcare.jpg" alt="Illustrative personal care still life, unbranded body wash, soap bar, loofah and folded towel on a pale oak shelf" width="1200" height="1500" decoding="async">
                   </picture></span>
                   <span class="slot-tag" aria-hidden="true">Illustrative image</span>
                 </figure>
@@ -1259,7 +1259,7 @@ html.lb-open{overflow:hidden}
                   <!-- EDIT: AI image slot: drop images/card-gifting.webp + .jpg when generated; see images/ai-prompts.md -->
                   <span class="slot-img"><picture>
                     <source type="image/webp" srcset="images/card-gifting.webp">
-                    <img src="images/card-gifting.jpg" alt="Illustrative gifting still life, a wine-red gift box with ivory ribbon, dried flowers and an unbranded perfume bottle" width="1200" height="1500" decoding="async">
+                    <img loading="lazy" src="images/card-gifting.jpg" alt="Illustrative gifting still life, a wine-red gift box with ivory ribbon, dried flowers and an unbranded perfume bottle" width="1200" height="1500" decoding="async">
                   </picture></span>
                   <span class="slot-tag" aria-hidden="true">Illustrative image</span>
                 </figure>

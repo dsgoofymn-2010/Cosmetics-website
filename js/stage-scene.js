@@ -23,7 +23,8 @@ export const PRODUCTS = [
   { id: 'lipstick-cap', file: 'lipstick-cap', name: 'Lipstick',    shelf: 'Makeup',        x: 1.0,   z: 0.6,   rotY: 0,   scale: 1.25, chipOf: 'lipstick' }
 ];
 
-export const CAMERA = { fov: 28, pitchDeg: 13, yawDeg: -8, padding: 0.08 };
+/* padding 8.5% so float and drift never take a product under 8% */
+export const CAMERA = { fov: 28, pitchDeg: 13, yawDeg: -8, padding: 0.085 };
 
 /* one soft round shadow texture, reused under every object */
 function shadowTexture() {
@@ -158,6 +159,15 @@ export async function buildStage(renderer, { tier = 'high', base = './' } = {}) 
   for (const it of items) {
     const b = new THREE.Box3().setFromObject(it.model);
     for (const x of [b.min.x, b.max.x]) for (const y of [b.min.y, b.max.y]) for (const z of [b.min.z, b.max.z]) points.push(new THREE.Vector3(x, y, z));
+    /* the lead product turns, so fit the whole circle its corners sweep */
+    if (it.lead) {
+      const c = b.getCenter(new THREE.Vector3());
+      const r = Math.hypot((b.max.x - b.min.x) / 2, (b.max.z - b.min.z) / 2);
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2;
+        for (const y of [b.min.y, b.max.y]) points.push(new THREE.Vector3(c.x + Math.cos(a) * r, y, c.z + Math.sin(a) * r));
+      }
+    }
   }
   for (let i = 0; i < 48; i++) {
     const a = (i / 48) * Math.PI * 2;

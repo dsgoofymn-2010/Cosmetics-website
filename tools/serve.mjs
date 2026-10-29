@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { readFile, readdir } from 'node:fs/promises';
 import { extname, join, dirname, basename, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { brotliCompressSync, gzipSync, constants as Z } from 'node:zlib';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.argv[2] || 4173);
@@ -44,8 +45,19 @@ createServer(async (req, res) => {
     if (path.endsWith('/')) path += 'index.html';
     const rel = normalize(path).replace(/\\/g, '/').replace(/^\/+/, '');
     if (rel.startsWith('..') || !(await exactCase(rel))) throw new Error('404');
-    const body = await readFile(join(ROOT, rel));
-    res.writeHead(200, { 'Content-Type': TYPES[extname(rel)] || 'application/octet-stream', ...vercelHeaders('/' + rel), 'Cache-Control': 'no-store' });
+    let body = await readFile(join(ROOT, rel));
+    const type = TYPES[extname(rel)] || 'application/octet-stream';
+    const head = { 'Content-Type': type, ...vercelHeaders('/' + rel) };
+    /* PROD=1 keeps vercel.json caching; otherwise never cache while developing */
+    if (!process.env.PROD) head['Cache-Control'] = 'no-store';
+    /* compress text like Vercel does */
+    const ae = String(req.headers['accept-encoding'] || '');
+    if (/text|javascript|json|xml|svg|manifest|vcard/.test(type) && body.length > 1024) {
+      if (ae.includes('br')) { body = brotliCompressSync(body, { params: { [Z.BROTLI_PARAM_QUALITY]: 9 } }); head['Content-Encoding'] = 'br'; }
+      else if (ae.includes('gzip')) { body = gzipSync(body); head['Content-Encoding'] = 'gzip'; }
+      head['Vary'] = 'Accept-Encoding';
+    }
+    res.writeHead(200, head);
     if (!KBPS) return res.end(body);
     const chunk = Math.max(1024, Math.round(KBPS * 1024 / 10));
     for (let i = 0; i < body.length; i += chunk) {

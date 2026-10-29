@@ -173,7 +173,7 @@ async function start() {
 
   canvas.addEventListener('pointerdown', (e) => {
     S.drag = { x: e.clientX, y: e.clientY, base: S.dragTarget, moved: false, type: e.pointerType };
-    if (e.pointerType === 'mouse') { canvas.setPointerCapture(e.pointerId); canvas.style.cursor = 'grabbing'; }
+    if (e.pointerType === 'mouse') { e.preventDefault(); canvas.setPointerCapture(e.pointerId); canvas.style.cursor = 'grabbing'; } /* no text selection while dragging */
   });
   canvas.addEventListener('pointermove', (e) => {
     if (S.drag && S.drag.type === 'mouse') {
@@ -262,10 +262,11 @@ async function start() {
     const s = S.scroll;
 
     /* camera: pointer parallax on desktop, scripted drift on touch, slow orbit on scroll */
-    const driftYaw = COARSE ? Math.sin(t * 0.21) * THREE.MathUtils.degToRad(3) : 0;
-    const driftPitch = COARSE ? Math.sin(t * 0.13 + 1) * THREE.MathUtils.degToRad(1.2) : 0;
-    S.yaw = damp(S.yaw, -S.px * THREE.MathUtils.degToRad(4) + driftYaw + s * THREE.MathUtils.degToRad(9), 3, dt);
-    S.pitch = damp(S.pitch, S.py * THREE.MathUtils.degToRad(2.5) + driftPitch + s * THREE.MathUtils.degToRad(5), 3, dt);
+    /* small enough to stay inside the 8% padding */
+    const driftYaw = COARSE ? Math.sin(t * 0.21) * THREE.MathUtils.degToRad(1.5) : 0;
+    const driftPitch = COARSE ? Math.sin(t * 0.13 + 1) * THREE.MathUtils.degToRad(0.6) : 0;
+    S.yaw = damp(S.yaw, -S.px * THREE.MathUtils.degToRad(4) + driftYaw - s * THREE.MathUtils.degToRad(4), 3, dt); /* orbit away from the text column */
+    S.pitch = damp(S.pitch, S.py * THREE.MathUtils.degToRad(2.5) + driftPitch + s * THREE.MathUtils.degToRad(4), 3, dt);
     applyFit(camera, stage, view, fit, { yaw: S.yaw, pitch: S.pitch });
 
     S.dragYaw = damp(S.dragYaw, S.dragTarget, 6, dt);
@@ -276,7 +277,7 @@ async function start() {
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
       const active = (S.hover && (it.chipOf || it.id) === S.hover) || (S.focus && (it.chipOf || it.id) === S.focus);
-      const spread = 1 + s * 0.09;
+      const spread = 1 + s * 0.05;
       it.holder.position.x = it.home.x * spread;
       it.holder.position.z = it.home.z * spread;
       if (!rising) {

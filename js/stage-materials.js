@@ -59,9 +59,15 @@ function fakeGlass(src) {
      strongest at grazing angles. On a dark field that is how glass reads. */
   const m = new THREE.MeshPhysicalMaterial({
     color: 0x000000, roughness: 0.04, metalness: 0,
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    transparent: true, depthWrite: false,
     clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1.8, specularIntensity: 1
   });
+  /* add light to colour only; leave alpha alone so the transparent canvas
+     never turns opaque (black) where the glass is */
+  m.blending = THREE.CustomBlending;
+  m.blendEquation = THREE.AddEquation;
+  m.blendSrc = THREE.OneFactor; m.blendDst = THREE.OneFactor;
+  m.blendSrcAlpha = THREE.ZeroFactor; m.blendDstAlpha = THREE.OneFactor;
   m.onBeforeCompile = (shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <dithering_fragment>',
