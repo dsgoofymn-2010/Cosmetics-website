@@ -1,0 +1,143 @@
+diff --git a/index.html b/index.html
+index 843ed5e..347d164 100644
+--- a/index.html
++++ b/index.html
+@@ -503,13 +503,16 @@ html.bn-js.bn-returning #heroBadge{
+ .sec-head .h2,.h2{font-size:var(--fs-h2); line-height:1.1; letter-spacing:-.015em}
+ .sec-sub{margin-top:18px; color:rgba(251,246,240,.78); max-width:60ch}
+ .archstage{display:grid; justify-content:center; margin-top:clamp(36px,6vh,70px)}
+-.archexp{position:relative; width:min(777px,72vw); aspect-ratio:777/309; border-radius:50% 50% 0 0/40% 40% 0 0;
+-  overflow:hidden; background-size:cover; background-position:center 30%; background-color:var(--card);
++.archexp{position:relative; width:min(1118px,100%); margin-inline:auto; padding:clamp(16px,2.2vw,30px);
++  background:var(--card); isolation:isolate;
+ }
+-.archexp::after{content:"";position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(255,244,235,.14);
+-  border-radius:inherit; pointer-events:none}
+-.archexp img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+-  transform:scale(1.18); object-position:center 32%; will-change:transform}
++.archexp::before{content:"";position:absolute; z-index:-1; inset:0; transform:translateY(-14px);
++  border:1px solid rgba(235,201,182,.5); border-radius:50% 50% 0 0/30% 30% 0 0;
++  box-shadow:0 0 0 10px rgba(235,201,182,.05); pointer-events:none}
++.archexp::after{content:"";position:absolute; inset:clamp(16px,2.2vw,30px); border:1px solid rgba(255,244,235,.18);
++  border-radius:8px; pointer-events:none}
++.archexp img{position:relative; width:100%; height:auto; aspect-ratio:auto; object-fit:contain;
++  object-position:center; transform:none; will-change:auto; border-radius:8px; background:var(--card)}
+ .arch-exp-cap{margin-top:20px; font-size:var(--fs-small); color:rgba(251,246,240,.7); text-align:center; letter-spacing:.06em}
+ .arch-glow{position:absolute; inset:-12% -18%; z-index:-1; border-radius:inherit;
+   background:radial-gradient(60% 55% at 50% 34%, rgba(235,201,182,.16), transparent 70%); pointer-events:none}
+@@ -628,12 +631,15 @@ html.bn-js.bn-returning #heroBadge{
+ .exp-grid{display:grid; grid-template-columns:minmax(0,44%) minmax(0,1fr); gap:clamp(28px,5vw,84px);
+   padding:clamp(90px,14vh,170px) var(--margin)}
+ .exp-photo{position:sticky; top:calc(50% - 44vh); height:88svh; display:grid; place-items:center}
+-.exp-frame{position:relative; width:min(378px,100%); aspect-ratio:378/742;
+-  border-radius:50% 50% 0 0/30% 30% 0 0; overflow:hidden;
+-  box-shadow:0 34px 70px -30px rgba(89,55,35,.5)}
+-.exp-frame img{width:100%; height:100%; object-fit:cover; object-position:center 30%}
+-.exp-frame::after{content:"";position:absolute;inset:0;border-radius:inherit;
+-  box-shadow:inset 0 0 0 1px rgba(42,37,35,.12); pointer-events:none}
++.exp-frame{position:relative; width:min(378px,100%); padding:16px; aspect-ratio:auto;
++  border-radius:0; overflow:visible; isolation:isolate}
++.exp-frame::before{content:"";position:absolute; z-index:-1; inset:0; transform:translateY(-12px);
++  border:1px solid rgba(179,38,46,.42); border-radius:50% 50% 0 0/28% 28% 0 0;
++  box-shadow:0 0 0 10px rgba(179,38,46,.05); pointer-events:none}
++.exp-frame img{position:relative; width:100%; height:auto; aspect-ratio:auto; object-fit:contain;
++  object-position:center; border-radius:8px; background:var(--ivory)}
++.exp-frame::after{content:"";position:absolute;inset:16px;border-radius:8px;
++  box-shadow:inset 0 0 0 1px rgba(42,37,35,.16), 0 34px 70px -30px rgba(89,55,35,.5); pointer-events:none}
+ .exp-steps{display:flex; flex-direction:column; gap:clamp(80px,16vh,150px); padding-top:6vh}
+ .exp-step{max-width:46ch}
+ .exp-step .ups{color:var(--muted-on-light)}
+@@ -643,7 +649,7 @@ html.bn-js.bn-returning #heroBadge{
+ @media (max-width:900px){
+   .exp-grid{grid-template-columns:1fr; padding-inline:var(--margin)}
+   .exp-photo{position:static; height:auto; margin-bottom:10px}
+-  .exp-frame{width:min(300px,72vw); aspect-ratio:378/742}
++  .exp-frame{width:min(300px,72vw); aspect-ratio:auto}
+   .exp-steps{gap:56px; padding-top:8px}
+ }
+ @media (max-width:900px){
+@@ -656,7 +662,7 @@ html.bn-js.bn-returning #heroBadge{
+ /* ============================================================
+    Shop for Him: giant outlined MEN type + portrait shelf photo
+    ============================================================ */
+-.mens{position:relative; padding:clamp(100px,16vh,190px) var(--margin); overflow:hidden}
++.mens{position:relative; padding:clamp(100px,16vh,190px) var(--margin); overflow:visible}
+ .mens-word{position:absolute; left:50%; top:10%; transform:translateX(-50%); z-index:0;
+   font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
+   font-size:clamp(10rem,32vw,30rem); line-height:.8; letter-spacing:.04em;
+@@ -667,10 +673,14 @@ html.bn-js.bn-returning #heroBadge{
+ .mens-copy .ups{color:var(--peach)}
+ .mens-copy h2{font-size:var(--fs-h2); margin-top:14px; letter-spacing:-.015em}
+ .mens-copy p{margin-top:16px; color:rgba(251,246,240,.8); max-width:44ch}
+-.mens-photo{width:min(378px,58vw); aspect-ratio:378/739; border-radius:50% 50% 0 0/26% 26% 0 0;
+-  overflow:hidden; position:relative; transform:translateY(6svh)}
+-.mens-photo img{width:100%; height:100%; object-fit:cover; will-change:transform}
+-.mens-photo::after{content:"";position:absolute;inset:0;border-radius:inherit;
++.mens-photo{width:min(378px,58vw); padding:16px; aspect-ratio:auto; border-radius:0;
++  overflow:visible; position:relative; transform:none; isolation:isolate}
++.mens-photo::before{content:"";position:absolute; z-index:-1; inset:0; transform:translateY(-12px);
++  border:1px solid rgba(235,201,182,.42); border-radius:50% 50% 0 0/24% 24% 0 0;
++  box-shadow:0 0 0 10px rgba(235,201,182,.04); pointer-events:none}
++.mens-photo img{position:relative; width:100%; height:auto; aspect-ratio:auto; object-fit:contain;
++  object-position:center; border-radius:8px; will-change:auto; background:var(--bg)}
++.mens-photo::after{content:"";position:absolute;inset:16px;border-radius:8px;
+   box-shadow:inset 0 0 0 1px rgba(255,244,235,.16); pointer-events:none}
+ @media (max-width:900px){.mens-grid{grid-template-columns:1fr; justify-items:start} .mens-photo{transform:none}}
+ 
+@@ -1026,7 +1036,7 @@ html.bn-js.bn-returning #heroBadge{
+               <div class="col-tilt" data-tilt>
+                 <figure class="col-slab" data-depth="60">
+                 <span class="illus"><svg viewBox="0 0 120 200" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M45 14h30l-2 12H47z"/><path d="M56 26l-4 8v110a16 16 0 0 0 32 0V34l-4-8"/><path d="M60 34v108"/></g></svg></span>
+-                <!-- EDIT: card image lives at images/card-mensgrooming.jpg (webp optional; jpg already in place) -->
++                <!-- EDIT: collection card remains illustrative; the real portrait is reserved for Shop for Him. -->
+                 <span class="slot-img"><img
+                      src="images/card-mensgrooming.jpg"
+                      alt="Illustrative men's grooming still life, unbranded black pump bottle, amber lotions, a razor and a shaving brush on a curved plinth in an arched niche"
+@@ -1130,8 +1140,8 @@ html.bn-js.bn-returning #heroBadge{
+         </div>
+       </div>
+       <figure class="mens-photo" data-lqip="ms">
+-        <img id="mensImg" src="images/card-mensgrooming.jpg" width="1200" height="1500" loading="lazy" decoding="async"
+-             alt="Illustrative men's grooming still life with unbranded pumps, a razor and a shaving brush on a plinth">
++        <img id="mensImg" src="images/mens-section.jpg" width="378" height="739" loading="lazy" decoding="async"
++             alt="A portrait view of the men's grooming section, with wooden shelves and care products">
+       </figure>
+     </div>
+   </section>
+@@ -3639,21 +3649,8 @@ html.bn-js.bn-returning #heroBadge{
+       });
+     });
+ 
+-    // arch expander: arch grows while the photo settles (transform + object zoom only)
+-    var arch = $('#archExp');
+-    if (arch) {
+-      var img = $('#sfImg');
+-      window.gsap.fromTo(arch, { scale: 0.62 }, {
+-        scale: 1, ease: 'none',
+-        scrollTrigger: { trigger: arch, start: 'top 92%', end: 'top 38%', scrub: 0.6 }
+-      });
+-      if (img) {
+-        window.gsap.fromTo(img, { scale: 1.18, yPercent: -2 }, {
+-          scale: 1.02, yPercent: 1.5, ease: 'none',
+-          scrollTrigger: { trigger: arch, start: 'top 92%', end: 'bottom 30%', scrub: 0.6 }
+-        });
+-      }
+-    }
++    // Real photos stay at their natural aspect ratio. The arch is decorative CSS,
++    // so no ScrollTrigger transform may move or enlarge the pixels.
+ 
+     // collections became a plain snap carousel: arrows wired further below,
+     // independent of GSAP so they work even if a scroll feature fails
+@@ -3667,12 +3664,6 @@ html.bn-js.bn-returning #heroBadge{
+         scrollTrigger: { trigger: '#mens', start: 'top bottom', end: 'bottom top', scrub: 0.4 }
+       });
+     }
+-    if (mi) {
+-      window.gsap.fromTo(mi, { yPercent: -7 }, {
+-        yPercent: 7, ease: 'none',
+-        scrollTrigger: { trigger: '#mens', start: 'top bottom', end: 'bottom top', scrub: 0.4 }
+-      });
+-    }
+ 
+     // footer wordmark breathes
+     var fw = $('#ftWord');

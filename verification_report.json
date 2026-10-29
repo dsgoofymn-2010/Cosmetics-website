@@ -1,0 +1,160 @@
+{
+  "defects": [
+    "WebGL canvas #gl was not preserved in hero section"
+  ],
+  "frameCaptures": [
+    {
+      "viewport": "mobile_390",
+      "timestamp": 0,
+      "file": "mobile_390_t0_0s.png"
+    },
+    {
+      "viewport": "mobile_390",
+      "timestamp": 0.5,
+      "file": "mobile_390_t0_5s.png"
+    },
+    {
+      "viewport": "mobile_390",
+      "timestamp": 1,
+      "file": "mobile_390_t1_0s.png"
+    },
+    {
+      "viewport": "mobile_390",
+      "timestamp": 1.5,
+      "file": "mobile_390_t1_5s.png"
+    },
+    {
+      "viewport": "mobile_390",
+      "timestamp": 2,
+      "file": "mobile_390_t2_0s.png"
+    },
+    {
+      "viewport": "mobile_390",
+      "timestamp": 2.5,
+      "file": "mobile_390_t2_5s.png"
+    },
+    {
+      "viewport": "mobile_390",
+      "timestamp": 3,
+      "file": "mobile_390_t3_0s.png"
+    },
+    {
+      "viewport": "mobile_390",
+      "timestamp": 3.4,
+      "file": "mobile_390_t3_4s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 0,
+      "file": "tablet_768_t0_0s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 0.5,
+      "file": "tablet_768_t0_5s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 1,
+      "file": "tablet_768_t1_0s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 1.5,
+      "file": "tablet_768_t1_5s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 2,
+      "file": "tablet_768_t2_0s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 2.5,
+      "file": "tablet_768_t2_5s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 3,
+      "file": "tablet_768_t3_0s.png"
+    },
+    {
+      "viewport": "tablet_768",
+      "timestamp": 3.4,
+      "file": "tablet_768_t3_4s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 0,
+      "file": "desktop_1440_t0_0s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 0.5,
+      "file": "desktop_1440_t0_5s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 1,
+      "file": "desktop_1440_t1_0s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 1.5,
+      "file": "desktop_1440_t1_5s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 2,
+      "file": "desktop_1440_t2_0s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 2.5,
+      "file": "desktop_1440_t2_5s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 3,
+      "file": "desktop_1440_t3_0s.png"
+    },
+    {
+      "viewport": "desktop_1440",
+      "timestamp": 3.4,
+      "file": "desktop_1440_t3_4s.png"
+    }
+  ],
+  "performance": {
+    "desktop_1440": {
+      "count": 216,
+      "avg": 16.66435185185185,
+      "worst": 17.199999999999818,
+      "fps": 60.00833449090152
+    },
+    "mobile_4x_throttled": {
+      "count": 177,
+      "avg": 20.61864406779661,
+      "worst": 150,
+      "fps": 48.49979449239622
+    }
+  },
+  "interactiveTests": {
+    "clickButton": true,
+    "pressEnter": true,
+    "pressSpace": true,
+    "escInterrupt": true,
+    "skipInterrupt": true,
+    "reducedMotion": true,
+    "webglFallback": true,
+    "returningVisitor": true
+  },
+  "postTransitionChecks": {
+    "bodyLock": false,
+    "introExists": false,
+    "canvasInHero": null,
+    "activeId": "heroHeading",
+    "scrollWorks": true,
+    "headerSticky": true,
+    "consoleErrors": []
+  }
+}
