@@ -147,7 +147,7 @@
     update();
 
     var list = [
-      ['top', 'Top'], ['inside', 'Shopfront'], ['collections', 'Collections'], ['shelf-guide', 'Find your shelf'],
+      ['top', 'Top'], ['collections', 'Collections'], ['shelf-guide', 'Find your shelf'],
       ['experience', 'At the counter'], ['mens', 'For him'], ['reviews', 'Reviews'], ['enquire', 'Direct line'], ['visit', 'Visit']
     ].filter(function (s) { return document.getElementById(s[0]); });
     var nav = document.createElement('nav');

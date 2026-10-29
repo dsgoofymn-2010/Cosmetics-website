@@ -9,7 +9,6 @@
 window.BN_I18N = {
   ta: [
     /* navigation and header */
-    ['.hd-nav a[href="#inside"]', 'கடைக்குள்'],
     ['.hd-nav a[href="#collections"]', 'தொகுப்புகள்'],
     ['.hd-nav a[href="#experience"]', 'அனுபவம்'],
     ['.hd-nav a[href="#reviews"]', 'மதிப்புரைகள்'],
@@ -29,10 +28,6 @@ window.BN_I18N = {
     ['.stage-chip[data-product="nail-polish"]', 'ஒப்பனை'],
     ['.stage-chip[data-product="cream-jar"]', 'சருமப் பராமரிப்பு'],
 
-    /* step inside */
-    ['#inside .sec-head .ups', 'கடை முகப்பு'],
-    ['#inside .sec-head h2', 'வளைவு வாசல் வழியே'],
-    ['#inside .sec-head h2 .curtain > span', 'உள்ளே வாருங்கள்.'],
 
     /* collections */
     ['#collections .sec-head .ups', 'தொகுப்புகள்'],

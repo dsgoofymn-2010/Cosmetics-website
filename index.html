@@ -4,7 +4,8 @@
   BEAUTE&NUTRIE - cosmetics boutique inside VR Chennai, Anna Nagar
   Pure static site: HTML + CSS + JS. No backend, no analytics, no cookies, no tracking.
   Every contact action goes straight to the shop (WhatsApp, tel, Google Maps).
-  The shop's three photos are the only real photos: store-front-clean (1118x621),
+  The shop's three photos are the only real photos: store-front-clean (1118x621, used only
+  as the social share image now that the shopfront section is removed),
   vanity-mirror (378x742), mens-section (378x739). The card-*.jpg files are
   illustrative art at 1200x1500, not photographs of stock. Never display any
   image above its native pixel width.
@@ -228,7 +229,7 @@ h1,h2,h3,h4,h5,h6,p,figure,blockquote,dl,dd{margin:0}
 ::selection{background:var(--red); color:var(--ivory)}
 
 /* sections that used to inherit the body colour keep it explicitly */
-.inside,.mens,.proof,.reviews,.visit,.ft{background-color:#140B0D}
+.mens,.proof,.reviews,.visit,.ft{background-color:#140B0D}
 .display{font-family:"Cormorant Garamond",Georgia,serif; font-weight:500; font-style:normal;
   letter-spacing:var(--track-display); line-height:1.08}
 .ups{font-size:var(--fs-small); text-transform:uppercase; letter-spacing:.24em; font-weight:500}
@@ -562,27 +563,10 @@ html.bn-js.bn-returning #heroBadge{
 @keyframes marq{to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.marq-track{animation:none}}
 
-/* ============================================================
-   Step inside: storefront inside the arch, arch expands on scroll
-   ============================================================ */
-.inside{padding:clamp(110px,15vh,190px) var(--margin) clamp(90px,12vh,150px); position:relative}
+/* shared section heading styles */
 .sec-head{max-width:820px}
 .sec-head .h2,.h2{font-size:var(--fs-h2); line-height:1.1; letter-spacing:-.015em}
 .sec-sub{margin-top:18px; color:rgba(251,246,240,.78); max-width:60ch}
-.archstage{display:grid; justify-content:center; margin-top:clamp(36px,6vh,70px)}
-.archexp{position:relative; width:min(1118px,100%); margin-inline:auto; padding:clamp(16px,2.2vw,30px);
-  background:var(--card); isolation:isolate;
-}
-.archexp::before{content:"";position:absolute; z-index:-1; inset:0; transform:translateY(-14px);
-  border:1px solid rgba(235,201,182,.5); border-radius:50% 50% 0 0/30% 30% 0 0;
-  box-shadow:0 0 0 10px rgba(235,201,182,.05); pointer-events:none}
-.archexp::after{content:"";position:absolute; inset:clamp(16px,2.2vw,30px); border:1px solid rgba(255,244,235,.18);
-  border-radius:8px; pointer-events:none}
-.archexp img{position:relative; width:100%; height:auto; aspect-ratio:auto; object-fit:contain;
-  object-position:center; transform:none; will-change:auto; border-radius:8px; background:var(--card)}
-.arch-exp-cap{margin-top:20px; font-size:var(--fs-small); color:rgba(251,246,240,.7); text-align:center; letter-spacing:.06em}
-.arch-glow{position:absolute; inset:-12% -18%; z-index:-1; border-radius:inherit;
-  background:radial-gradient(60% 55% at 50% 34%, rgba(235,201,182,.16), transparent 70%); pointer-events:none}
 
 /* ============================================================
    Collections: one snap carousel everywhere, arrows on desktop, swipe on touch
@@ -1059,7 +1043,6 @@ html.lb-open{overflow:hidden}
     <span class="hd-name">BEAUTE<span style="color:var(--red)">&amp;</span>NUTRIE<span class="hd-sub">Anna Nagar, Chennai</span></span>
   </a>
   <nav class="hd-nav" aria-label="Main">
-    <a class="hd-link" href="#inside">Inside</a>
     <a class="hd-link" href="#collections">Collections</a>
     <a class="hd-link" href="#experience">Experience</a>
     <a class="hd-link" href="#reviews">Reviews</a>
@@ -1119,24 +1102,6 @@ html.lb-open{overflow:hidden}
       <span>Makeup<i></i>Skincare<i></i>Haircare<i></i>Men's Grooming<i></i>Personal Care<i></i>Gifting<i></i></span>
     </div>
   </div>
-
-  <!-- ============ STEP INSIDE ============ -->
-  <section class="inside" id="inside">
-    <div class="sec-head">
-      <p class="ups" style="color:var(--peach)">The shopfront</p>
-      <h2 class="h2 display" style="margin-top:12px">Step inside the
-        <span class="curtain" data-curt><span>arched doorway.</span></span></h2>
-      <p class="sec-sub rv">You cannot miss it: a red facade pulling you in from the mall corridor, the wordmark glowing above the arch, and shelves that keep going past the counter.</p>
-    </div>
-    <div class="archstage">
-      <figure class="archexp" id="archExp" data-lqip="sf">
-        <img id="sfImg" data-lightbox src="images/store-front-clean.jpg" width="1118" height="621"
-             alt="The red BEAUTE and NUTRIE facade with a glowing white wordmark above the arched shop entrance"
-             loading="lazy" decoding="async">
-        <figcaption class="arch-exp-cap" style="margin-top:20px;font-size:var(--fs-small);color:rgba(251,246,240,.7);text-align:center;letter-spacing:.06em">Inside VR Chennai &middot; Ground Floor &middot; Shop No. G-30</figcaption>
-      </figure>
-    </div>
-  </section>
 
   <!-- ============ COLLECTIONS ============ -->
   <section class="coll" id="collections" aria-label="Collections">
@@ -1619,7 +1584,6 @@ html.lb-open{overflow:hidden}
       <nav class="ft-col" aria-label="Quick links">
         <b>Site</b>
         <ul>
-          <li><a href="#inside">Inside the shop</a></li>
           <li><a href="#collections">Collections</a></li>
           <li><a href="#experience">Experience</a></li>
           <li><a href="#reviews">Reviews</a></li>

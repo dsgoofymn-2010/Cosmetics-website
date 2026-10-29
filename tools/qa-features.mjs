@@ -50,16 +50,16 @@ async function page(w = 1440, extra = {}) {
 {
   const { ctx, p } = await page();
   const imgs = p.locator('img[data-lightbox]');
-  ok((await imgs.count()) === 3, 'lightbox: three real photos are wired');
+  ok((await imgs.count()) === 2, 'lightbox: the two real photos on the page are wired');
   await imgs.nth(0).scrollIntoViewIfNeeded();
   await imgs.nth(0).click();
   await p.waitForTimeout(300);
   ok(await p.evaluate(() => document.querySelector('dialog.lb').open), 'lightbox: click opens');
-  ok((await p.textContent('.lb-count')).includes('1 of 3'), 'lightbox: counter 1 of 3');
+  ok((await p.textContent('.lb-count')).includes('1 of 2'), 'lightbox: counter 1 of 2');
   await p.keyboard.press('ArrowRight');
-  ok((await p.textContent('.lb-count')).includes('2 of 3'), 'lightbox: ArrowRight goes next');
+  ok((await p.textContent('.lb-count')).includes('2 of 2'), 'lightbox: ArrowRight goes next');
   await p.keyboard.press('ArrowLeft'); await p.keyboard.press('ArrowLeft');
-  ok((await p.textContent('.lb-count')).includes('3 of 3'), 'lightbox: ArrowLeft wraps to last');
+  ok((await p.textContent('.lb-count')).includes('2 of 2'), 'lightbox: ArrowLeft wraps to last');
   for (let i = 0; i < 5; i++) await p.keyboard.press('Tab');
   ok(await p.evaluate(() => !!document.activeElement.closest('dialog.lb')), 'lightbox: focus stays inside while tabbing');
   await p.waitForFunction(() => document.querySelector('.lb-img').complete && document.querySelector('.lb-img').naturalWidth > 0);
@@ -88,7 +88,7 @@ async function page(w = 1440, extra = {}) {
     d.dispatchEvent(new PointerEvent('pointerdown', { pointerType: 'touch', clientX: 300, clientY: 400, bubbles: true }));
     d.dispatchEvent(new PointerEvent('pointerup', { pointerType: 'touch', clientX: 120, clientY: 400, bubbles: true }));
   });
-  ok((await p.textContent('.lb-count')).includes('2 of 3'), 'lightbox: swipe left goes next on touch');
+  ok((await p.textContent('.lb-count')).includes('2 of 2'), 'lightbox: swipe left goes next on touch');
   await p.screenshot({ path: '.work/shots/qa-lightbox-390.png' });
   await ctx.close();
 }

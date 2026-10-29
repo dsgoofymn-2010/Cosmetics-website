@@ -1,0 +1,472 @@
+{
+  "refs": [
+    [
+      "favicon.ico",
+      true
+    ],
+    [
+      "icons/favicon.svg",
+      true
+    ],
+    [
+      "icons/apple-touch-icon.png",
+      true
+    ],
+    [
+      "site.webmanifest",
+      true
+    ],
+    [
+      "fonts/cormorant-garamond-latin-500-normal.woff2",
+      true
+    ],
+    [
+      "fonts/cormorant-garamond-latin-400-italic.woff2",
+      true
+    ],
+    [
+      "fonts/dm-sans-latin-400-normal.woff2",
+      true
+    ],
+    [
+      "fonts/cormorant-garamond-latin-400-normal.woff2",
+      true
+    ],
+    [
+      "fonts/cormorant-garamond-latin-600-normal.woff2",
+      true
+    ],
+    [
+      "fonts/dm-sans-latin-500-normal.woff2",
+      true
+    ],
+    [
+      "fonts/noto-sans-tamil-tamil-400-normal.woff2",
+      true
+    ],
+    [
+      "fonts/noto-sans-tamil-tamil-500-normal.woff2",
+      true
+    ],
+    [
+      "fonts/noto-serif-tamil-tamil-500-normal.woff2",
+      true
+    ],
+    [
+      "images/hero-poster.webp",
+      true
+    ],
+    [
+      "vendor/three@0.186.1/three.core.js",
+      true
+    ],
+    [
+      "vendor/three@0.186.1/three.module.js",
+      true
+    ],
+    [
+      "js/stage-scene.js",
+      true
+    ],
+    [
+      "images/hero-poster-lqip.webp",
+      true
+    ],
+    [
+      "images/store-front-clean.jpg",
+      true
+    ],
+    [
+      "images/card-makeup.jpg",
+      true
+    ],
+    [
+      "images/card-skincare.jpg",
+      true
+    ],
+    [
+      "images/card-haircare.jpg",
+      true
+    ],
+    [
+      "images/card-mensgrooming.jpg",
+      true
+    ],
+    [
+      "images/card-personalcare.jpg",
+      true
+    ],
+    [
+      "images/card-gifting.jpg",
+      true
+    ],
+    [
+      "images/vanity-mirror.jpg",
+      true
+    ],
+    [
+      "images/mens-section.jpg",
+      true
+    ],
+    [
+      "beaute-nutrie.vcf",
+      true
+    ],
+    [
+      "vendor/three@0.128.0/three.min.js",
+      true
+    ],
+    [
+      "vendor/gsap@3.12.5/gsap.min.js",
+      true
+    ],
+    [
+      "vendor/gsap@3.12.5/ScrollTrigger.min.js",
+      true
+    ],
+    [
+      "vendor/lenis@1.1.14/lenis.min.js",
+      true
+    ],
+    [
+      "js/i18n.js",
+      true
+    ],
+    [
+      "js/extras.js",
+      true
+    ],
+    [
+      "js/hero-stage.js",
+      true
+    ],
+    [
+      "",
+      true
+    ],
+    [
+      "icons/icon-192.png",
+      true
+    ],
+    [
+      "icons/icon-512.png",
+      true
+    ],
+    [
+      "icons/icon-maskable-512.png",
+      true
+    ],
+    [
+      "images/hero-poster.json",
+      true
+    ],
+    [
+      "js/stage-materials.js",
+      true
+    ],
+    [
+      "models/perfume.glb",
+      true
+    ],
+    [
+      "models/compact.glb",
+      true
+    ],
+    [
+      "models/nail-polish.glb",
+      true
+    ],
+    [
+      "models/cream-jar.glb",
+      true
+    ],
+    [
+      "models/serum.glb",
+      true
+    ],
+    [
+      "models/lipstick.glb",
+      true
+    ],
+    [
+      "models/lipstick-cap.glb",
+      true
+    ]
+  ],
+  "fit": [
+    [
+      "1440 rest",
+      "min canvas margin 7.8%",
+      "min region margin 8.5%"
+    ],
+    [
+      "1440 after drag right (+35 deg)",
+      "min canvas margin 7.4%",
+      "min region margin -1.1%"
+    ],
+    [
+      "1440 after drag left (-35 deg)",
+      "min canvas margin 7.3%",
+      "min region margin -1.5%"
+    ],
+    [
+      "1440 scroll 30%",
+      "min canvas margin 7.2%",
+      "min region margin -1.1%"
+    ],
+    [
+      "1440 scroll 60%",
+      "min canvas margin 7.1%",
+      "min region margin -1.2%"
+    ],
+    [
+      "768 rest",
+      "min canvas margin 7.9%",
+      "min region margin 8.5%"
+    ],
+    [
+      "768 after drag right (+35 deg)",
+      "min canvas margin 6.8%",
+      "min region margin 2.1%"
+    ],
+    [
+      "768 after drag left (-35 deg)",
+      "min canvas margin 6.7%",
+      "min region margin 3.1%"
+    ],
+    [
+      "768 scroll 30%",
+      "min canvas margin 6.6%",
+      "min region margin 1.5%"
+    ],
+    [
+      "768 scroll 60%",
+      "min canvas margin 6.5%",
+      "min region margin 0.9%"
+    ],
+    [
+      "390 rest",
+      "min canvas margin 8.0%",
+      "min region margin 8.0%"
+    ],
+    [
+      "390 scroll 30%",
+      "min canvas margin 8.1%",
+      "min region margin 8.1%"
+    ],
+    [
+      "390 scroll 60%",
+      "min canvas margin 7.9%",
+      "min region margin 7.9%"
+    ]
+  ],
+  "overlap": [
+    [
+      "1440 rest",
+      "none"
+    ],
+    [
+      "1440 drag right",
+      "none"
+    ],
+    [
+      "1440 drag left",
+      "none"
+    ],
+    [
+      "1440 scroll 30% (fixed header ignored)",
+      "none"
+    ],
+    [
+      "1440 scroll 60% (fixed header ignored)",
+      "none"
+    ],
+    [
+      "768 rest",
+      "none"
+    ],
+    [
+      "768 drag right",
+      "none"
+    ],
+    [
+      "768 drag left",
+      "none"
+    ],
+    [
+      "768 scroll 30% (fixed header ignored)",
+      "none"
+    ],
+    [
+      "768 scroll 60% (fixed header ignored)",
+      "none"
+    ],
+    [
+      "390 rest",
+      "none"
+    ],
+    [
+      "390 scroll 30% (fixed header ignored)",
+      "none"
+    ],
+    [
+      "390 scroll 60% (fixed header ignored)",
+      "none"
+    ]
+  ],
+  "luminance": [
+    [
+      1440,
+      "top band y=78",
+      "range 20.3..20.7",
+      "worst local bump 0.18"
+    ],
+    [
+      1440,
+      "bottom band y=836",
+      "range 22.8..25.7",
+      "worst local bump 1.19"
+    ],
+    [
+      1440,
+      "CSS background only y=450",
+      "range 20.8..21.5",
+      "worst local bump 0.31",
+      "samples 20.86 20.96 21.03 21.08 21.2 21.22 21.25 21.39 21.41"
+    ],
+    [
+      768,
+      "top band y=78",
+      "range 20.4..20.8",
+      "worst local bump 0.22"
+    ],
+    [
+      768,
+      "bottom band y=960",
+      "range 22.1..25.7",
+      "worst local bump 1.78"
+    ],
+    [
+      768,
+      "CSS background only y=450",
+      "range 20.5..20.9",
+      "worst local bump 0.27",
+      "samples 20.54 20.64 20.76 20.71 20.8"
+    ],
+    [
+      390,
+      "stage top y+6",
+      "range 21.1..21.7",
+      "worst local bump 0.39"
+    ],
+    [
+      390,
+      "stage bottom y-6",
+      "range 22.9..23.5",
+      "worst local bump 0.32"
+    ],
+    [
+      390,
+      "CSS background only y=422",
+      "range 21.9..22.6",
+      "worst local bump 0.34",
+      "samples 22.27 22.17 22.35 22.44 22.43"
+    ]
+  ],
+  "ring": [
+    [
+      1440,
+      "none"
+    ],
+    [
+      768,
+      "none"
+    ],
+    [
+      390,
+      "none"
+    ]
+  ],
+  "frames": [
+    {
+      "width": 1440,
+      "cpuThrottle": 1,
+      "tier": "high",
+      "idle": {
+        "frames": 512,
+        "avgMs": 7.81,
+        "p95Ms": 13.9,
+        "worstMs": 14.1
+      },
+      "scroll": {
+        "frames": 535,
+        "avgMs": 7.48,
+        "p95Ms": 13.8,
+        "worstMs": 76.5
+      }
+    },
+    {
+      "width": 390,
+      "cpuThrottle": 4,
+      "tier": "low",
+      "idle": {
+        "frames": 319,
+        "avgMs": 12.49,
+        "p95Ms": 20.7,
+        "worstMs": 27.8
+      },
+      "scroll": {
+        "frames": 305,
+        "avgMs": 13.11,
+        "p95Ms": 20.9,
+        "worstMs": 27.8
+      }
+    }
+  ],
+  "modes": [
+    [
+      "WebGL off",
+      "PASS poster shown, static mode"
+    ],
+    [
+      "Reduced motion",
+      "PASS poster only, no WebGL, no float"
+    ],
+    [
+      "Slow 3G (400 kbps, 400 ms)",
+      "PASS poster visible at 11.3 s, live scene at 40.8 s"
+    ],
+    [
+      "Keyboard chips",
+      "PASS reached perfume, serum, lipstick, compact, nail-polish, cream-jar; focused chip opacity 1; Enter opened https://api.whatsapp.com/send/?phone=919"
+    ],
+    [
+      "Touch scroll over canvas",
+      "PASS page scrolled 285 px from a swipe that started on the canvas"
+    ],
+    [
+      "Touch tap product",
+      "PASS chip shown: serum"
+    ],
+    [
+      "Reload",
+      "PASS hero-stage poster-in is-live is-ready"
+    ]
+  ],
+  "network": [],
+  "console": [],
+  "weight": {
+    "firstLoadKB": 968.4,
+    "modelsKB": 980,
+    "byTypeKB": {
+      "html": 55.6,
+      "fonts": 139.1,
+      "images": 365,
+      "js": 407.5,
+      "other": 1.1,
+      "models (after first paint)": 980
+    },
+    "fcpMs": 448
+  },
+  "defects": []
+}
