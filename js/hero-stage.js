@@ -3,7 +3,7 @@
    any error. The chips are real links in the HTML, so the WhatsApp enquiry
    works by keyboard and without this script. */
 import * as THREE from 'three';
-import { createRenderer, buildStage, computeFit, applyFit } from './stage-scene.js';
+import { createRenderer, buildStage, computeFit, applyFit, PODIUM } from './stage-scene.js';
 
 const html = document.documentElement;
 const hero = document.getElementById('top');
@@ -105,6 +105,11 @@ async function start() {
   const renderer = createRenderer(canvas, { tier });
   const stage = await buildStage(renderer, { tier, base: './' });
   const { scene, world, items } = stage;
+  /* products are cut at the podium surface, so while they wait to rise they
+     are hidden inside the podium instead of hanging below it */
+  renderer.localClippingEnabled = true;
+  const floor = new THREE.Plane(new THREE.Vector3(0, 1, 0), -PODIUM.height);
+  items.forEach((it) => it.model.traverse((o) => { if (o.isMesh) o.material.clippingPlanes = [floor]; }));
   let fit = null;
   const anchor = new THREE.Vector3();
   const damp = (a, b, k, dt) => a + (b - a) * (1 - Math.exp(-k * dt));
@@ -266,6 +271,7 @@ async function start() {
     S.dragYaw = damp(S.dragYaw, S.dragTarget, 6, dt);
     world.rotation.y = S.dragYaw;
     world.position.y = s * 0.14;
+    floor.constant = -(world.position.y + PODIUM.height - 0.002);
 
     for (let i = 0; i < items.length; i++) {
       const it = items[i];

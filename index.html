@@ -23,7 +23,7 @@
 <title>BEAUTE&amp;NUTRIE - Cosmetics Boutique in Anna Nagar, Chennai</title>
 <meta name="description" content="BEAUTE&amp;NUTRIE is a cosmetics boutique inside VR Chennai on the ground floor of the Anna Nagar mall. Makeup, skincare, haircare, grooming and gifting, with personal, patient advice at the counter. Open daily, closes 10 PM.">
 <link rel="canonical" href="https://beauteandnutrie.com/"><!-- EDIT: once deployed -->
-<meta name="theme-color" content="#1B0C10">
+<meta name="theme-color" content="#240B12">
 <meta name="robots" content="index,follow">
 
 <!-- Open Graph (EDIT: image + URLs once deployed) -->
@@ -182,10 +182,11 @@
    Base
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; background:#140B0D; overflow-x:clip}
+/* html and body carry the hero's top colour so overscroll above the hero shows the same tone */
+html{-webkit-text-size-adjust:100%; background:#240B12; overflow-x:clip}
 html.lenis-on{height:auto}
 body{
-  margin:0; background:#140B0D; color:var(--ivory);
+  margin:0; background:#240B12; color:var(--ivory);
   font-family:"DM Sans","Segoe UI",system-ui,sans-serif;
   font-size:var(--fs-body); line-height:var(--lh-body);
   font-synthesis-weight:none; -webkit-font-smoothing:antialiased;
@@ -201,6 +202,8 @@ h1,h2,h3,h4,h5,h6,p,figure,blockquote,dl,dd{margin:0}
 [tabindex="-1"]:focus{outline:none}
 ::selection{background:var(--red); color:var(--ivory)}
 
+/* sections that used to inherit the body colour keep it explicitly */
+.inside,.mens,.proof,.reviews,.visit,.ft{background-color:#140B0D}
 .display{font-family:"Cormorant Garamond",Georgia,serif; font-weight:500; font-style:normal;
   letter-spacing:var(--track-display); line-height:1.08}
 .ups{font-size:var(--fs-small); text-transform:uppercase; letter-spacing:.24em; font-weight:500}
@@ -247,7 +250,7 @@ html.bn-js .curtain>span{transform:translateY(101%); transition:transform .9s va
 .hd{position:fixed; inset:0 0 auto; z-index:1000; padding:14px var(--margin);
   display:flex; align-items:center; justify-content:space-between; gap:18px;
   background:transparent; transition:background .35s,backdrop-filter .35s,box-shadow .35s}
-.hd.scrolled{background:rgba(27,12,16,.72); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+.hd.scrolled{background:rgba(31,12,17,.95); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
   box-shadow:0 1px 0 rgba(251,246,240,.08)}
 .hd-brand{display:flex; align-items:center; gap:12px; min-width:0}
 .hd-arch{width:30px;height:34px;flex:none}
