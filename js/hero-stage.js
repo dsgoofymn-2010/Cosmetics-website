@@ -100,7 +100,16 @@ if (!stageEl || !canvas) {
   });
 }
 
+/* the poster carries first paint; the 3D work waits for page load and an idle moment */
+function whenIdle() {
+  return new Promise((res) => {
+    const idle = () => (window.requestIdleCallback ? requestIdleCallback(() => res(), { timeout: 2500 }) : setTimeout(res, 300));
+    if (document.readyState === 'complete') idle(); else addEventListener('load', idle, { once: true });
+  });
+}
+
 async function start() {
+  await whenIdle();
   const tier = LOW ? 'low' : 'high';
   const renderer = createRenderer(canvas, { tier });
   const stage = await buildStage(renderer, { tier, base: './' });
@@ -228,9 +237,22 @@ async function start() {
     rising = true;
     items.forEach((it) => { it.lift.position.y = riseFrom(it); it.shadow.material.opacity = 0; });
   }
-  stageEl.classList.add('is-live');
-  render(performance.now());
-  requestAnimationFrame(() => stageEl.classList.add('is-ready'));
+  /* compile every shader in parallel (KHR_parallel_shader_compile) before the first
+     frame, so the first render does not block the main thread */
+  applyFit(camera, stage, view, fit);
+  if (renderer.compileAsync) { try { await renderer.compileAsync(scene, camera); } catch (e) {} }
+
+  let live = false;
+  function goLive() {
+    if (live) return;
+    live = true;
+    stageEl.classList.add('is-live');
+    render(performance.now());
+    requestAnimationFrame(() => stageEl.classList.add('is-ready'));
+    kick();
+  }
+  /* while the intro covers the hero nothing is drawn; the stage goes live at reveal */
+  if (!rising) goLive();
 
   if (rising) {
     const go = () => {
@@ -243,15 +265,16 @@ async function start() {
       });
       window.setTimeout(() => { rising = false; }, 2600);
     };
-    const mo = new MutationObserver(() => { if (revealed()) { mo.disconnect(); go(); } });
+    const mo = new MutationObserver(() => { if (revealed()) { mo.disconnect(); goLive(); go(); } });
     mo.observe(html, { attributes: true, attributeFilter: ['class'] });
     mo.observe(document.body, { childList: true });
   }
 
   /* ---------- render loop, only while the hero is on screen and the tab is visible ---------- */
-  new IntersectionObserver((en) => { visible = en[0].isIntersecting; kick(); }, { threshold: 0 }).observe(hero);
+  /* watch the stage itself: on phones it starts below the fold and stays idle until scrolled to */
+  new IntersectionObserver((en) => { visible = en[0].isIntersecting; kick(); }, { threshold: 0 }).observe(stageEl);
   document.addEventListener('visibilitychange', kick);
-  function kick() { if (!raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(loop); } }
+  function kick() { if (live && !raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(loop); } }
 
 
   function render(now) {
@@ -308,7 +331,7 @@ async function start() {
 
   function loop(now) {
     raf = 0;
-    if (!visible || document.hidden) return;
+    if (!live || !visible || document.hidden) return;
     render(now);
     raf = requestAnimationFrame(loop);
   }
