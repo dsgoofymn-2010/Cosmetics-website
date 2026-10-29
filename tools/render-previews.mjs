@@ -12,7 +12,7 @@ const page = await browser.newPage({ viewport: { width: 900, height: 900 } });
 page.on('console', (m) => { if (m.type() === 'error') console.log('console:', m.text()); });
 for (const n of names) {
   const yaw = process.env.YAW || (n === 'compact' ? -25 : 25);
-  await page.goto(`${BASE}/tools/preview.html?m=${n}&yaw=${yaw}&tier=${tier}`);
+  await page.goto(`${BASE}/tools/preview.html?m=${n}&yaw=${yaw}&tier=${tier}${process.env.BG ? '&bg=' + process.env.BG : ''}`);
   await page.waitForFunction(() => document.body.dataset.ready, null, { timeout: 30000 });
   const out = `models/previews/${n}${tier === 'low' ? '-low' : ''}${process.env.YAW ? '-' + process.env.YAW : ''}.png`;
   await page.screenshot({ path: out });

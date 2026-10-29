@@ -44,6 +44,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 
+<!-- Hero stage: poster first, then the 3D modules (pinned, self-hosted) -->
+<link rel="preload" as="image" href="images/hero-poster.webp" fetchpriority="high">
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three@0.186.1/three.module.js",
+  "three/addons/": "./vendor/three@0.186.1/addons/"
+} }
+</script>
+<link rel="modulepreload" href="vendor/three@0.186.1/three.core.js">
+<link rel="modulepreload" href="vendor/three@0.186.1/three.module.js">
+<link rel="modulepreload" href="js/stage-scene.js">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -185,6 +197,8 @@ button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
 ul,ol{margin:0; padding:0; list-style:none}
 h1,h2,h3,h4,h5,h6,p,figure,blockquote,dl,dd{margin:0}
 :focus-visible{outline:3px solid var(--oak); outline-offset:3px; border-radius:4px}
+/* headings that only receive focus programmatically (skip link, intro handoff) are not controls */
+[tabindex="-1"]:focus{outline:none}
 ::selection{background:var(--red); color:var(--ivory)}
 
 .display{font-family:"Cormorant Garamond",Georgia,serif; font-weight:500; font-style:normal;
@@ -393,7 +407,9 @@ html.bn-fallback .introfx{display:flex}
 
 /* hero heading: no focus outline when focus is moved programmatically */
 #heroHeading:focus{outline:none}
-#heroHeading:focus-visible{outline:3px solid var(--oak); outline-offset:3px; border-radius:4px}
+#heroHeading:focus-visible{outline:none}
+/* headings that only receive focus programmatically (skip link, intro handoff) are not controls */
+[tabindex="-1"]:focus{outline:none}
 
 /* hero initial-hidden states for transition: JS adds bn-transition-active on html/body
    so normal page loads (no intro) show everything immediately */
@@ -426,11 +442,36 @@ html.bn-js.bn-returning #heroBadge{
    ============================================================ */
 .hero{position:relative; isolation:isolate; min-height:100svh; display:flex; align-items:center; overflow:hidden;
   padding:calc(96px + var(--margin)) var(--margin) clamp(40px,7vh,84px)}
-#gl{position:absolute; inset:0; z-index:1; width:100%; height:100%; display:block; pointer-events:none}
-.hero-bg{position:absolute; inset:0; z-index:0; background:
-  radial-gradient(70% 80% at 10% 14%, rgba(110,21,32,.12), transparent 70%),
-  linear-gradient(135deg, #2A0A12 0%, #1C0D10 55%, #140B0D 100%)}
-.hero-copy{position:relative; z-index:2; max-width:min(760px,86vw); transform:translateY(-5vh)}
+/* one clean field, deep wine at the top easing to charcoal: no radial glow, no
+   light layer. All light on the products comes from the 3D lights. */
+.hero-bg{position:absolute; inset:0; z-index:0; background:linear-gradient(172deg, #240B12 0%, #1F0C11 40%, #1A1214 100%)}
+.hero-copy{position:relative; z-index:2; max-width:min(620px, calc(45vw - var(--margin) - 16px)); transform:translateY(-5vh)}
+
+/* ---- product stage: canvas spans the hero, products fit inside the region ---- */
+.hero-stage{position:absolute; inset:0; z-index:1}
+.hero-stage-region{position:absolute; top:92px; bottom:84px; left:45%; right:calc(var(--margin) * .5)}
+.hero-stage-region::before{content:""; position:absolute; inset:0; background:url("images/hero-poster-lqip.webp") center/contain no-repeat;
+  filter:blur(10px); opacity:.85; transition:opacity .4s}
+/* the blurred placeholder only shows until the poster has loaded, so it never leaves a halo */
+.hero-stage.poster-in .hero-stage-region::before{opacity:0}
+.hero-poster{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; transition:opacity .7s var(--ease)}
+#heroCanvas{position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0;
+  transition:opacity .7s var(--ease); touch-action:pan-y; pointer-events:none}
+.hero-stage.is-live #heroCanvas{pointer-events:auto}
+.hero-stage.is-ready #heroCanvas{opacity:1}
+.hero-stage.is-ready .hero-poster,.hero-stage.is-ready .hero-stage-region::before{opacity:0}
+.hero-chips{position:absolute; inset:0; pointer-events:none; z-index:3}
+.stage-chip{position:absolute; left:0; top:0; margin-top:-10px; display:inline-flex; align-items:center; gap:8px;
+  min-height:44px; padding:10px 16px 10px 14px; border-radius:10px; background:var(--ivory); color:var(--ink-on-light);
+  font-size:.92rem; font-weight:500; line-height:1.1; white-space:nowrap; opacity:0; pointer-events:none;
+  box-shadow:0 12px 26px -14px rgba(0,0,0,.7); transition:opacity .25s var(--ease)}
+.stage-chip svg{width:16px; height:16px; flex:none; color:var(--red)}
+.stage-chip.on,.stage-chip:focus-visible{opacity:1; pointer-events:auto}
+.hero-stage.is-static .hero-stage-region{cursor:pointer}
+@media (min-width:768px) and (max-width:1099px){
+  .hero-copy{max-width:calc(50vw - var(--margin) - 12px)}
+  .hero-stage-region{left:50%}
+}
 .hero h1{font-size:clamp(3.2rem,8vw,7rem); line-height:var(--lh-hero); letter-spacing:-.015em; font-weight:500}
 .hero h1 em{font-style:italic; color:var(--peach)}
 .hero-kicker{display:flex; align-items:center; gap:14px; margin-bottom:26px}
@@ -472,9 +513,14 @@ html.bn-js.bn-returning #heroBadge{
   background:linear-gradient(var(--peach),transparent); animation:drift 2.2s var(--ease) infinite}
 @keyframes drift{0%{transform:scaleY(.2); transform-origin:top}50%{transform:scaleY(1)}100%{transform:scaleY(.2); transform-origin:bottom}}
 @media (max-width:767px){
-  .hero{min-height:auto; padding-top:96px; padding-bottom:116px}
+  .hero{min-height:auto; padding-top:96px; padding-bottom:116px; flex-direction:column; align-items:stretch}
   .hero-copy{max-width:100%; transform:none}
   .hero-sub{max-width:56ch}
+  /* stage sits under the text block, full bleed, nothing overlaps the copy */
+  /* about 55vh, capped at the height the wide arrangement needs so no empty bands */
+  .hero-stage{position:relative; inset:auto; height:min(55svh, 96vw); min-height:300px; max-height:520px;
+    margin:22px calc(var(--margin) * -1) 0; width:auto; align-self:stretch}
+  .hero-stage-region{inset:0}
 }
 
 /* ============================================================
@@ -912,6 +958,23 @@ html.bn-js.bn-returning #heroBadge{
         <b class="num">4.9</b>
         <span>1,716 Google reviews<br class="badge-br"><span class="badge-extra">Ground Floor, VR Chennai</span></span>
       </aside>
+    </div>
+    <!-- Product stage: poster first, live 3D once the models load (js/hero-stage.js).
+         Products are unbranded illustrations; each chip asks the shop about that shelf. -->
+    <div class="hero-stage" id="heroStage">
+      <div class="hero-stage-region" id="heroStageRegion">
+        <img class="hero-poster" id="heroPoster" src="images/hero-poster.webp" width="1400" height="1175" fetchpriority="high" decoding="async"
+             alt="Illustrative still life of unbranded beauty products on an ivory and oak podium: a perfume, a serum dropper, an open lipstick, an open compact, a nail polish and a cream jar">
+      </div>
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="hero-chips" role="group" aria-label="Ask the shop about these shelves">
+        <a class="stage-chip" data-product="perfume" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Personal%20Care.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Perfume: ask the shop about </span>Personal Care</a>
+        <a class="stage-chip" data-product="serum" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Skincare.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Serum: ask the shop about </span>Skincare</a>
+        <a class="stage-chip" data-product="lipstick" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Lipstick: ask the shop about </span>Makeup</a>
+        <a class="stage-chip" data-product="compact" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Compact: ask the shop about </span>Makeup</a>
+        <a class="stage-chip" data-product="nail-polish" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Makeup.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Nail polish: ask the shop about </span>Makeup</a>
+        <a class="stage-chip" data-product="cream-jar" href="https://wa.me/919355591909?text=Hi%20BEAUTE%26NUTRIE!%20I%20have%20a%20question%20about%20Skincare.%20Could%20you%20help%20me%20with%20availability%20and%20advice%3F" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span class="sr-only">Cream jar: ask the shop about </span>Skincare</a>
+      </div>
     </div>
     <p class="hero-scroll" aria-hidden="true">Scroll</p>
   </section>
@@ -1387,13 +1450,12 @@ html.bn-js.bn-returning #heroBadge{
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>window.THREE || document.write('<script src="./node_modules/three/build/three.min.js"><\/script>');</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script>window.gsap || document.write('<script src="./node_modules/gsap/dist/gsap.min.js"><\/script>');</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script>window.ScrollTrigger || document.write('<script src="./node_modules/gsap/dist/ScrollTrigger.min.js"><\/script>');</script>
-<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<!-- Same library versions as before, served from this site (no CDN at runtime) -->
+<script src="vendor/three@0.128.0/three.min.js"></script>
+<script>/* the intro keeps its own r128 global; clear its version marker so the hero module does not warn */ try { delete window.__THREE__; } catch (e) {}</script>
+<script src="vendor/gsap@3.12.5/gsap.min.js"></script>
+<script src="vendor/gsap@3.12.5/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis@1.1.14/lenis.min.js"></script>
 <script>
 /* ================= INTRO MODULE - brand-name cinematic, enter by button =========
    Plays once per tab. After the name lands, the venom-style wordmark button
@@ -1877,6 +1939,8 @@ html.bn-js.bn-returning #heroBadge{
 
   function phaseFrameSafe(now) {
     frame = 0;
+    /* the hero has its own product stage; once the transition hands off, this scene retires */
+    if (window.bnIntroRetired) { teardown(); return; }
     if (document.hidden || !heroVisible) { return; }
     try { phaseFrame(now); } catch (err) {
       if (!failed) { failed = true; teardown(); cssFallback(); }
@@ -2479,20 +2543,25 @@ html.bn-js.bn-returning #heroBadge{
       window.bnTransitionRunning = false;
       window.bnParticlesControlledByGsap = false;
 
-      // Move WebGL canvas to hero section BEFORE removing intro overlay
-      var glCanvas2 = document.getElementById('gl');
-      var heroSection = document.getElementById('top');
-      if (glCanvas2 && heroSection && glCanvas2.parentNode !== heroSection) {
-        heroSection.insertBefore(glCanvas2, heroSection.firstChild);
-        glCanvas2.style.position = 'absolute';
-        glCanvas2.style.inset = '0';
-        glCanvas2.style.width = '100%';
-        glCanvas2.style.height = '100%';
-        glCanvas2.style.zIndex = '1';
-        glCanvas2.style.display = 'block';
-        glCanvas2.style.pointerEvents = 'none';
-        glCanvas2.style.filter = 'none';
+      // Retire the intro scene: the hero runs its own product stage, so the
+      // intro canvas, particles and renderer are disposed instead of moved in
+      window.bnIntroRetired = true;
+      if (hasScene && scene) {
+        try {
+          scene.traverse(function (obj) {
+            if (obj.geometry) { obj.geometry.dispose(); }
+            if (obj.material) {
+              if (obj.material.map) { obj.material.map.dispose(); }
+              obj.material.dispose();
+            }
+          });
+        } catch (e) {}
       }
+      if (renderer) {
+        try { renderer.dispose(); renderer.forceContextLoss(); } catch (e) {}
+      }
+      var glCanvas2 = document.getElementById('gl');
+      if (glCanvas2 && glCanvas2.parentNode) { glCanvas2.parentNode.removeChild(glCanvas2); }
 
       // Remove intro overlay from DOM
       if (introEl && introEl.parentNode) {
@@ -2513,27 +2582,9 @@ html.bn-js.bn-returning #heroBadge{
       if (window.bnScene && window.bnScene.disposeArch) {
         try { window.bnScene.disposeArch(); } catch (e) {}
       }
-      if (window.bnShowHeroCosmetics) { window.bnShowHeroCosmetics(); }
+      nameMesh = null;
+      window.bnScene = null;
 
-      // Dispose intro-only objects (nameMesh)
-      if (hasScene && nameMesh) {
-        try {
-          scene.remove(nameMesh);
-          if (nameMesh.geometry) { nameMesh.geometry.dispose(); }
-          if (nameMesh.material) {
-            if (nameMesh.material.map) { nameMesh.material.map.dispose(); }
-            nameMesh.material.dispose();
-          }
-          nameMesh = null;
-        } catch (e) {}
-      }
-
-      // Reset camera to hero resting position
-      if (camera) {
-        camera.fov = 45;
-        camera.position.set(0, 0.1, 5);
-        camera.updateProjectionMatrix();
-      }
       // Unlock scroll and focus
       unlockAndFocus();
 
@@ -4028,5 +4079,6 @@ html.bn-js.bn-returning #heroBadge{
   })();
 })();
 </script>
+<script type="module" src="js/hero-stage.js"></script>
 </body>
 </html>

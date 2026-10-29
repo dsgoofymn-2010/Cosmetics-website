@@ -31,7 +31,7 @@ renderer.setSize(innerWidth, innerHeight, false);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1;
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#8a8580');
+scene.background = new THREE.Color(q.get('bg') ? '#' + q.get('bg') : '#8a8580');
 const pm = new THREE.PMREMGenerator(renderer);
 scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
 const key = new THREE.DirectionalLight('#fff1e2', 2.2); key.position.set(3, 5, 4); scene.add(key);

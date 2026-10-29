@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Poster render</title>
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<script type="importmap">
+{ "imports": {
+  "three": "../vendor/three@0.186.1/three.module.js",
+  "three/addons/": "../vendor/three@0.186.1/addons/"
+} }
+</script>
+</head>
+<body>
+<canvas id="c" width="1400" height="1400" style="width:1400px;height:1400px"></canvas>
+<script type="module">
+/* Renders the hero stage at rest into a square: the hero shows this image with
+   object-fit: contain inside the same region, so poster and live scene line up. */
+import * as THREE from 'three';
+import { createRenderer, buildStage, computeFit, applyFit } from '../js/stage-scene.js';
+
+const W = 1400;
+const canvas = document.getElementById('c');
+const renderer = createRenderer(canvas, { tier: 'high', preserve: true });
+renderer.setPixelRatio(1);
+const stage = await buildStage(renderer, { tier: 'high', base: '../' });
+const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
+/* pass 1 in a square to learn the content aspect, pass 2 at that aspect */
+let view = { w: W, h: W };
+let fit = computeFit(camera, stage, view, { x: 0, y: 0, w: W, h: W });
+const H = Math.round(W * fit.extents.h / fit.extents.w);
+view = { w: W, h: H };
+canvas.width = W; canvas.height = H;
+canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+renderer.setSize(W, H, false);
+fit = computeFit(camera, stage, view, { x: 0, y: 0, w: W, h: H });
+applyFit(camera, stage, view, fit);
+renderer.render(stage.scene, camera);
+renderer.render(stage.scene, camera);
+
+const anchors = {};
+const v = new THREE.Vector3();
+for (const it of stage.items) {
+  if (it.chipOf) continue;
+  it.lift.getWorldPosition(v);
+  v.y += it.height + 0.1;
+  v.project(camera);
+  anchors[it.id] = [+(v.x * 0.5 + 0.5).toFixed(4), +(-v.y * 0.5 + 0.5).toFixed(4)];
+}
+/* screen boxes so the poster can answer hover and tap like the live scene */
+const boxes = {};
+for (const it of stage.items) {
+  const id = it.chipOf || it.id;
+  const b = new THREE.Box3().setFromObject(it.model);
+  let x0 = 1, x1 = 0, y0 = 1, y1 = 0;
+  for (const x of [b.min.x, b.max.x]) for (const y of [b.min.y, b.max.y]) for (const z of [b.min.z, b.max.z]) {
+    v.set(x, y, z).project(camera);
+    const u = v.x * 0.5 + 0.5, w = -v.y * 0.5 + 0.5;
+    x0 = Math.min(x0, u); x1 = Math.max(x1, u); y0 = Math.min(y0, w); y1 = Math.max(y1, w);
+  }
+  const prev = boxes[id];
+  boxes[id] = prev ? [Math.min(prev[0], x0), Math.min(prev[1], y0), Math.max(prev[2], x1), Math.max(prev[3], y1)] : [x0, y0, x1, y1];
+  /* listed front to back so the nearer product wins an overlap */
+  boxes[id].z = it.z;
+}
+const order = Object.keys(boxes).sort((a, b) => boxes[b].z - boxes[a].z);
+const boxList = order.map((id) => [id, ...boxes[id].slice(0, 4).map((n) => +n.toFixed(4))]);
+const webp = canvas.toDataURL('image/webp', 0.86);
+const tiny = document.createElement('canvas');
+tiny.width = 48; tiny.height = Math.round(48 * H / W);
+tiny.getContext('2d').drawImage(canvas, 0, 0, tiny.width, tiny.height);
+window.posterResult = { webp, lqip: tiny.toDataURL('image/webp', 0.6), anchors, boxes: boxList, width: W, height: H };
+</script>
+</body>
+</html>

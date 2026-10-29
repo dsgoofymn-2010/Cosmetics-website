@@ -31,28 +31,43 @@ export function fixMaterials(root, { tier = 'high' } = {}) {
   });
 }
 
-/* transparent glass with a fresnel edge: reads as glass, renders in one pass */
+/* transparent glass with a fresnel edge: reads as glass, renders in one pass.
+   Coloured glass keeps its tint (base colour times attenuation colour); clear
+   glass stays nearly invisible in the middle and catches light at the edges. */
 function fakeGlass(src) {
-  const tint = src.attenuationColor ? src.attenuationColor.clone() : new THREE.Color(1, 1, 1);
-  const dense = (src.userData && src.userData.attenuationDistance) < 0.2;
+  const atten = src.attenuationColor ? src.attenuationColor.clone() : new THREE.Color(1, 1, 1);
+  const tint = src.color.clone().multiply(atten);
+  const hsl = {}; tint.getHSL(hsl);
+  const coloured = hsl.s > 0.25 && hsl.l < 0.75;
+  if (coloured) {
+    const m = new THREE.MeshPhysicalMaterial({
+      color: tint, roughness: Math.min(0.35, src.roughness), metalness: 0,
+      transparent: true, opacity: 0.62, depthWrite: false,
+      clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.2
+    });
+    m.onBeforeCompile = (shader) => {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        '#include <dithering_fragment>',
+        `#include <dithering_fragment>
+         float fres = pow(1.0 - clamp(abs(dot(normal, normalize(vViewPosition))), 0.0, 1.0), 3.0);
+         gl_FragColor.a = clamp(gl_FragColor.a + fres * 0.3, 0.0, 1.0);`
+      );
+    };
+    return m;
+  }
+  /* clear glass: no body colour, only reflections added over what is behind,
+     strongest at grazing angles. On a dark field that is how glass reads. */
   const m = new THREE.MeshPhysicalMaterial({
-    color: dense ? tint.clone().multiplyScalar(1.4) : tint.clone().lerp(new THREE.Color(1, 1, 1), 0.55),
-    roughness: Math.min(0.5, src.roughness),
-    metalness: 0,
-    transparent: true,
-    opacity: dense ? 0.92 : 0.32,
-    depthWrite: false,
-    clearcoat: 1,
-    clearcoatRoughness: 0.05,
-    envMapIntensity: 1.4,
-    side: THREE.FrontSide
+    color: 0x000000, roughness: 0.04, metalness: 0,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1.8, specularIntensity: 1
   });
   m.onBeforeCompile = (shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <dithering_fragment>',
       `#include <dithering_fragment>
-       float fres = pow(1.0 - abs(dot(normalize(vNormal), normalize(vViewPosition))), 2.5);
-       gl_FragColor.a = clamp(gl_FragColor.a + fres * 0.55, 0.0, 1.0);`
+       float fres = pow(1.0 - clamp(abs(dot(normal, normalize(vViewPosition))), 0.0, 1.0), 2.0);
+       gl_FragColor.rgb *= 0.45 + fres * 1.6;`
     );
   };
   return m;
