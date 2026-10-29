@@ -170,10 +170,10 @@
    Base
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; background:var(--bg); overflow-x:clip}
+html{-webkit-text-size-adjust:100%; background:#140B0D; overflow-x:clip}
 html.lenis-on{height:auto}
 body{
-  margin:0; background:var(--bg); color:var(--ivory);
+  margin:0; background:#140B0D; color:var(--ivory);
   font-family:"DM Sans","Segoe UI",system-ui,sans-serif;
   font-size:var(--fs-body); line-height:var(--lh-body);
   font-synthesis-weight:none; -webkit-font-smoothing:antialiased;
@@ -428,8 +428,8 @@ html.bn-js.bn-returning #heroBadge{
   padding:calc(96px + var(--margin)) var(--margin) clamp(40px,7vh,84px)}
 #gl{position:absolute; inset:0; z-index:1; width:100%; height:100%; display:block; pointer-events:none}
 .hero-bg{position:absolute; inset:0; z-index:0; background:
-  radial-gradient(48% 62% at 86% 46%, rgba(235,201,182,.16), transparent 70%),
-  radial-gradient(115% 85% at 50% 0%, var(--wine-deep) 0%, var(--bg) 58%, #12090C 100%)}
+  radial-gradient(70% 80% at 10% 14%, rgba(110,21,32,.12), transparent 70%),
+  linear-gradient(135deg, #2A0A12 0%, #1C0D10 55%, #140B0D 100%)}
 .hero-copy{position:relative; z-index:2; max-width:min(760px,86vw); transform:translateY(-5vh)}
 .hero h1{font-size:clamp(3.2rem,8vw,7rem); line-height:var(--lh-hero); letter-spacing:-.015em; font-weight:500}
 .hero h1 em{font-style:italic; color:var(--peach)}
@@ -448,7 +448,7 @@ html.bn-js.bn-returning #heroBadge{
 .btn-ghost:hover{border-color:var(--ivory); background:rgba(251,246,240,.08)}
 .hero-badge{position:relative; z-index:3; align-self:flex-start; margin:22px 0 0;
   display:flex; align-items:center; gap:14px; padding:14px 20px; border-radius:var(--radius);
-  box-sizing:border-box; max-width:100%;
+  box-sizing:border-box; width:fit-content; max-width:100%;
   background:rgba(24,10,13,.5); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   box-shadow:0 1px 0 rgba(251,246,240,.09)}
 .hero-badge .stars{display:inline-flex; gap:3px; color:var(--gold)}
@@ -1672,7 +1672,8 @@ html.bn-js.bn-returning #heroBadge{
   }
 
   function initGL() {
-    renderer = new THREE_.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer = new THREE_.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, premultipliedAlpha: false });
+    renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.outputEncoding = THREE_.sRGBEncoding;
     renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -1764,8 +1765,8 @@ html.bn-js.bn-returning #heroBadge{
     dg.addColorStop(1, 'rgba(251,246,240,0)');
     dctx.fillStyle = dg; dctx.fillRect(0, 0, 32, 32);
     particles = new THREE_.Points(pGeo, new THREE_.PointsMaterial({
-      color: 0xEBC9B6, size: 0.13, map: new THREE_.CanvasTexture(dotC),
-      transparent: true, opacity: 0, depthWrite: false, blending: THREE_.AdditiveBlending
+      color: 0xEBC9B6, size: 0.018, map: new THREE_.CanvasTexture(dotC),
+      transparent: true, opacity: 0, depthWrite: false, blending: THREE_.NormalBlending
     }));
     scene.add(particles);
 
