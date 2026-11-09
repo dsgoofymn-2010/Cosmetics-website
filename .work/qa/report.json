@@ -73,10 +73,6 @@
       true
     ],
     [
-      "images/store-front-clean.jpg",
-      true
-    ],
-    [
       "images/card-makeup.jpg",
       true
     ],
@@ -330,9 +326,9 @@
     [
       1440,
       "CSS background only y=450",
-      "range 20.8..21.5",
-      "worst local bump 0.31",
-      "samples 20.86 20.96 21.03 21.08 21.2 21.22 21.25 21.39 21.41"
+      "range 20.6..21.4",
+      "worst local bump 0.26",
+      "samples 20.86 20.83 21.05 21.08 21.06 21.24 21.25 21.25 21.43"
     ],
     [
       768,
@@ -393,16 +389,16 @@
       "cpuThrottle": 1,
       "tier": "high",
       "idle": {
-        "frames": 512,
-        "avgMs": 7.81,
-        "p95Ms": 13.9,
-        "worstMs": 14.1
+        "frames": 519,
+        "avgMs": 7.71,
+        "p95Ms": 13.8,
+        "worstMs": 14
       },
       "scroll": {
-        "frames": 535,
-        "avgMs": 7.48,
+        "frames": 514,
+        "avgMs": 7.78,
         "p95Ms": 13.8,
-        "worstMs": 76.5
+        "worstMs": 124.8
       }
     },
     {
@@ -410,16 +406,16 @@
       "cpuThrottle": 4,
       "tier": "low",
       "idle": {
-        "frames": 319,
-        "avgMs": 12.49,
-        "p95Ms": 20.7,
-        "worstMs": 27.8
+        "frames": 240,
+        "avgMs": 16.69,
+        "p95Ms": 62.4,
+        "worstMs": 83.6
       },
       "scroll": {
-        "frames": 305,
-        "avgMs": 13.11,
-        "p95Ms": 20.9,
-        "worstMs": 27.8
+        "frames": 60,
+        "avgMs": 66.77,
+        "p95Ms": 90.2,
+        "worstMs": 97.1
       }
     }
   ],
@@ -434,7 +430,7 @@
     ],
     [
       "Slow 3G (400 kbps, 400 ms)",
-      "PASS poster visible at 11.3 s, live scene at 40.8 s"
+      "PASS poster visible at 11.3 s, live scene at 40.3 s"
     ],
     [
       "Keyboard chips",
@@ -456,17 +452,17 @@
   "network": [],
   "console": [],
   "weight": {
-    "firstLoadKB": 968.4,
+    "firstLoadKB": 819,
     "modelsKB": 980,
     "byTypeKB": {
-      "html": 55.6,
+      "html": 55.4,
       "fonts": 139.1,
-      "images": 365,
+      "images": 215.9,
       "js": 407.5,
       "other": 1.1,
       "models (after first paint)": 980
     },
-    "fcpMs": 448
+    "fcpMs": 568
   },
   "defects": []
 }

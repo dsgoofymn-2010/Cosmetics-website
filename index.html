@@ -148,10 +148,7 @@
   <div class="vignette-overlay" id="vignetteOverlay" aria-hidden="true"></div>
   <!-- chromatic overlay: subtle red/cyan edge shift at fly-through peak on desktop -->
   <div class="chroma-overlay" id="chromaOverlay" aria-hidden="true"></div>
-  <!-- wordmark FLIP proxy: travels from intro center into header logo position -->
-  <div class="flip-wordmark" id="flipWordmark" aria-hidden="true">BEAUTE<span style="color:var(--red)">&amp;</span>NUTRIE</div>
   <div class="intro-hud">
-    <p class="intro-count" id="introCount" aria-hidden="true"><span id="introNum">0</span></p>
     <p class="intro-word" id="introWord">ANNA NAGAR, CHENNAI</p>
   </div>
   <div class="intro-line" aria-hidden="true"></div>
@@ -253,7 +250,9 @@ html.bn-js .rv-hold{opacity:0; transform:translateY(10vh)}
 /* Reveal wrappers for headings: padding so ascenders/descenders and italic flourishes never clip */
 .curtain{display:block; overflow:hidden; padding-top:.08em; padding-bottom:.22em; margin-top:-.08em; margin-bottom:-.22em; padding-right:.08em}
 .curtain>span{display:block}
-html.bn-js .curtain>span{transform:translateY(101%); transition:transform .9s var(--ease-outExpo)}
+/* 140%, not 101%: the mask has .22em of bottom padding and italic ascenders
+   rise above the line box, so a smaller push leaves letter tips showing */
+html.bn-js .curtain>span{transform:translateY(140%); transition:transform .9s var(--ease-outExpo)}
 .curtain.in>span,.curtain>span.in{transform:translateY(0)!important}
 
 /* film grain, very subtle (user asked: subtle, unify photo quality) */
@@ -332,7 +331,7 @@ html.bn-no-intro .intro{display:none}
   background:rgba(20,9,12,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
   transition:background .25s,color .25s}
 .intro-skip.gone{opacity:0; pointer-events:none; transform:translateY(-6px)}
-.intro-count,.intro-line{transition:opacity .5s ease}
+.intro-line{transition:opacity .5s ease}
 /* the venom enter (real OriginKit "venom-button", ported to vanilla): the goo
    canvas paints the lacquer pill behind the DOM button and the hand canvas
    paints the glove cursor over it. While WebGL runs, the button is a
@@ -365,8 +364,6 @@ html.bn-no-intro .intro{display:none}
 @media (max-width:640px){
   .venom-btn{font-size:1.04rem; letter-spacing:.15em; padding:11px 30px; min-height:56px}
 }
-.intro-count{position:fixed; right:var(--margin); top:var(--margin); font-family:"Cormorant Garamond",Georgia,serif;
-  font-size:clamp(1.6rem,2.6vw,2.4rem); color:var(--ivory); opacity:.85}
 /* wordmark letters rise during the second phase */
 .intro-word span{display:inline-block; opacity:0; transform:translateY(.55em)}
 .intro-word.rise span{opacity:1; transform:none;
@@ -384,6 +381,15 @@ html.bn-fallback .introfx{display:flex}
   transform:translate(-50%,-50%); border-radius:50%;
   background:radial-gradient(circle, rgba(235,201,182,.13), transparent 62%);
   animation:fb-glow 2.8s ease-out both}
+/* short landscape screens (phones on their side): a smaller arch sits higher
+   so the enter button below it and the tagline never touch it */
+@media (orientation:landscape) and (max-height:520px){
+  .introfx-arch{top:32%; width:min(30vmin,300px)}
+  .introfx-glow{top:34%; width:min(50vmin,480px)}
+  .venom-stage{top:60%; height:22%}
+  .intro .intro-hud{bottom:7svh}
+  .intro-line{bottom:4svh}
+}
 @keyframes fb-arch{from{opacity:0; transform:translate(-50%,-50%) scale(.82)}to{opacity:.92;transform:translate(-50%,-50%) scale(1)}}
 @keyframes fb-breathe{from{opacity:.66}to{opacity:.98}}
 @keyframes fb-glow{from{opacity:0}to{opacity:1}}
@@ -412,14 +418,6 @@ html.bn-fallback .introfx{display:flex}
   box-shadow:inset 0 0 100px rgba(179,38,46,0.35);
   opacity:0; mix-blend-mode:screen; will-change:opacity}
 
-/* wordmark FLIP proxy: travels from intro center into header logo position */
-.flip-wordmark{
-  position:fixed; top:0; left:0; z-index:1500; pointer-events:none;
-  font-family:"Cormorant Garamond",Georgia,serif;
-  font-weight:600; letter-spacing:.01em; color:var(--ivory);
-  opacity:0; transform-origin:top left; white-space:nowrap;
-  will-change:transform,opacity}
-
 /* debug timeline scrubber (shown when data-transition-debug on body or ?debug=1) */
 .tl-debug{
   position:fixed; bottom:16px; right:16px; z-index:9999;
@@ -445,7 +443,7 @@ html.bn-fallback .introfx{display:flex}
 html.bn-js.bn-transition-active [data-hero="header"]{
   opacity:0 !important; transform:translateY(-24px) !important; will-change:opacity,transform}
 html.bn-js.bn-transition-active #heroHeading .curtain>span{
-  transform:translateY(101%) !important}
+  transform:translateY(140%) !important}
 html.bn-js.bn-transition-active [data-hero="subline"]{
   opacity:0 !important; transform:translateY(18px) !important; will-change:opacity,transform}
 html.bn-js.bn-transition-active [data-hero="ctas"]{
@@ -714,12 +712,14 @@ html.bn-js.bn-returning #heroBadge{
    Shop for Him: giant outlined MEN type + portrait shelf photo
    ============================================================ */
 .mens{position:relative; padding:clamp(100px,16vh,190px) var(--margin); overflow:visible}
-.mens-word{position:absolute; left:50%; top:10%; transform:translateX(-50%); z-index:0;
+/* MEN stays in normal flow so it reserves its own height: the copy below can
+   grow (longer Tamil lines, stacked phone layout) without running into it */
+.mens-word{position:relative; display:block; width:max-content; left:50%; transform:translateX(-50%); z-index:0;
   font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
   font-size:clamp(10rem,32vw,30rem); line-height:.8; letter-spacing:.04em;
   color:transparent; -webkit-text-stroke:1px rgba(235,201,182,.34); user-select:none}
 .mens-grid{position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1fr) auto;
-  gap:clamp(24px,5vw,80px); align-items:center; margin-top:clamp(60px,14vh,140px)}
+  gap:clamp(24px,5vw,80px); align-items:center; margin-top:clamp(24px,4vh,48px)}
 .mens-copy{max-width:520px}
 .mens-copy .ups{color:var(--peach)}
 .mens-copy h2{font-size:var(--fs-h2); margin-top:14px; letter-spacing:-.015em}
@@ -1885,11 +1885,18 @@ html.lb-open{overflow:hidden}
     g.clearRect(0, 0, 2048, 512);
     var serif = '"Cormorant Garamond", Georgia, serif';
     g.textBaseline = 'middle';
-    function spaced(text, font, x, y, gap) {
-      g.font = font;
-      var w = 0;
-      for (var i = 0; i < text.length; i++) { w += g.measureText(text.charAt(i)).width; }
-      var extra = gap * (text.length - 1);
+    /* maxW: the font shrinks until the line fits, so letters never have to be
+       squeezed together with negative spacing */
+    function spaced(text, font, x, y, gap, maxW) {
+      var size = parseFloat(font.match(/(\d+(?:\.\d+)?)px/)[1]);
+      var w, extra = gap * (text.length - 1);
+      for (;;) {
+        g.font = font.replace(/\d+(?:\.\d+)?px/, size + 'px');
+        w = 0;
+        for (var i = 0; i < text.length; i++) { w += g.measureText(text.charAt(i)).width; }
+        if (!maxW || w + extra <= maxW || size < 40) { break; }
+        size -= 2;
+      }
       var px = x - (w + extra) / 2;
       for (var j = 0; j < text.length; j++) {
         var chx = text.charAt(j);
@@ -1900,7 +1907,8 @@ html.lb-open{overflow:hidden}
     g.shadowColor = 'rgba(235,201,182,.4)';
     g.shadowBlur = 28;
     g.fillStyle = '#FBF6F0';
-    spaced('BEAUTE&NUTRIE', '600 218px ' + serif, 1024, 205, -8);
+    /* 1660px of the 2048 canvas = the 4.54 world width fitStage plans for */
+    spaced('BEAUTE&NUTRIE', '600 218px ' + serif, 1024, 205, 6, 1660);
     g.shadowBlur = 0;
     g.fillStyle = '#EBC9B6';
     spaced('COSMETICS BOUTIQUE', '400 52px "DM Sans", "Segoe UI", sans-serif', 1024, 405, 10);
@@ -2178,7 +2186,6 @@ html.lb-open{overflow:hidden}
   var bloomEl     = document.getElementById('bloomOverlay');
   var vignetteEl  = document.getElementById('vignetteOverlay');
   var chromaEl    = document.getElementById('chromaOverlay');
-  var flipWordEl  = document.getElementById('flipWordmark');
   var headerEl    = document.getElementById('hd');
   var heroH1      = document.getElementById('heroHeading');
   var heroSub     = document.querySelector('[data-hero="subline"]');
@@ -2379,13 +2386,17 @@ html.lb-open{overflow:hidden}
       }, 0);
     }
 
-    // Headline wordmark letter-spacing tightens a touch
-    if (introWordEl) {
-      tl.to(introWordEl, {
-        letterSpacing: '0.12em',
-        opacity: 0.3,
+    // Intro labels, progress line, Skip pill and the glove cursor leave first,
+    // so none of them is still on screen when the site fades in beneath
+    var introChrome = [introWordEl, skipBtn,
+      introEl.querySelector('.intro-line'),
+      document.getElementById('venomStage')].filter(Boolean);
+    if (skipBtn) { skipBtn.style.pointerEvents = 'none'; }
+    if (introChrome.length) {
+      tl.to(introChrome, {
+        opacity: 0,
         duration: T.holdEnd,
-        ease: 'power2.inOut'
+        ease: 'power2.out'
       }, 0);
     }
 
@@ -2523,35 +2534,7 @@ html.lb-open{overflow:hidden}
       html.classList.remove('bn-transition-active');
     }, [], T.revealEnd);
 
-    // Keep the wordmark: FLIP-style animation from intro center into header logo
-    var targetWordmark = document.querySelector('#hd .hd-name');
-    if (flipWordEl && targetWordmark) {
-      var initW = Math.min(window.innerWidth * 0.75, 620);
-      var initFontSize = Math.max(24, Math.round(initW * 0.11));
-      flipWordEl.style.fontSize = initFontSize + 'px';
-      var startX = (window.innerWidth - initW) / 2;
-      var startY = window.innerHeight * 0.44;
-
-      var targetRect = targetWordmark.getBoundingClientRect();
-      var targetScale = targetRect.width / Math.max(1, initW);
-
-      tl.set(targetWordmark, { opacity: 0 }, T.revealEnd);
-      tl.fromTo(flipWordEl,
-        { opacity: 1, x: startX, y: startY, scale: 1 },
-        {
-          x: targetRect.left,
-          y: targetRect.top + 2,
-          scale: targetScale,
-          duration: landDur * 0.72,
-          ease: 'power3.inOut'
-        },
-        T.revealEnd
-      );
-      tl.set(targetWordmark, { opacity: 1 }, T.revealEnd + landDur * 0.72);
-      tl.set(flipWordEl, { opacity: 0 }, T.revealEnd + landDur * 0.72);
-    }
-
-    // Header slides down from -24px
+    // Header slides down from -24px, logo included
     if (headerEl) {
       tl.fromTo(headerEl,
         { opacity: 0, y: -24 },
@@ -2565,7 +2548,7 @@ html.lb-open{overflow:hidden}
       var h1Lines = heroH1.querySelectorAll('.curtain>span');
       h1Lines.forEach(function (span, i) {
         tl.fromTo(span,
-          { y: '101%' },
+          { y: '140%' },
           { y: '0%', duration: landDur * 0.65, ease: 'power3.out' },
           T.revealEnd + i * 0.09
         );
@@ -2744,15 +2727,6 @@ html.lb-open{overflow:hidden}
       if (introEl && introEl.parentNode) {
         introEl.setAttribute('aria-hidden', 'true');
         introEl.parentNode.removeChild(introEl);
-      }
-
-      // Hide FLIP wordmark proxy if still around
-      if (flipWordEl) {
-        flipWordEl.style.opacity = '0';
-        if (flipWordEl.parentNode) { flipWordEl.parentNode.removeChild(flipWordEl); }
-      }
-      if (targetWordmark) {
-        targetWordmark.style.opacity = '1';
       }
 
       // Dispose intro-only objects before the hero becomes interactive
@@ -3926,12 +3900,13 @@ html.lb-open{overflow:hidden}
     // collections became a plain snap carousel: arrows wired further below,
     // independent of GSAP so they work even if a scroll feature fails
 
-    // MEN outline parallax
+    // MEN outline parallax: same travel as before, but only upward, so the
+    // drift never carries the outline down into the copy below it
     var mw = $('#mensWord');
     var mi = $('#mensImg');
     if (mw) {
-      window.gsap.fromTo(mw, { xPercent: -50, yPercent: 12 }, {
-        xPercent: -50, yPercent: -12, ease: 'none',
+      window.gsap.fromTo(mw, { xPercent: -50, yPercent: 0 }, {
+        xPercent: -50, yPercent: -24, ease: 'none',
         scrollTrigger: { trigger: '#mens', start: 'top bottom', end: 'bottom top', scrub: 0.4 }
       });
     }
