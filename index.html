@@ -1830,12 +1830,17 @@ html.lb-open{overflow:hidden}
   }
   setTarget(24); tickNum();
 
-  /* split the tagline into letters so it can rise once the name has landed */
+  /* split the tagline into letters so it can rise once the name has landed.
+     The readable text stays a real (visually hidden) span: aria-label is not
+     allowed on a paragraph, so the screen reader name must come from content. */
   var wordEl = overlay.querySelector('.intro-word');
   if (wordEl) {
     var wtxt = wordEl.textContent;
-    wordEl.setAttribute('aria-label', wtxt.replace(/\s+/g, ' ').trim());
     wordEl.innerHTML = '';
+    var srWord = document.createElement('span');
+    srWord.className = 'sr-only';
+    srWord.textContent = wtxt.replace(/\s+/g, ' ').trim();
+    wordEl.appendChild(srWord);
     for (var wi = 0; wi < wtxt.length; wi++) {
       var ch = wtxt.charAt(wi);
       var sp = document.createElement('span');
