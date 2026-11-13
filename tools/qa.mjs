@@ -292,6 +292,16 @@ await frameRun(390, 4);
 {
   const { ctx, p } = await open(1440);
   await p.goto(DEV + '/'); await ready(p); await p.waitForTimeout(800);
+  /* the site behaviour check: the click Enter produces must be trusted and not
+     swallowed by any handler (preventDefault would break the enquiry for real
+     keyboard users even when the popup opens) */
+  await p.evaluate(() => {
+    window.__chipClick = null;
+    document.addEventListener('click', (e) => {
+      const a = e.target && e.target.closest ? e.target.closest('.stage-chip') : null;
+      if (a) window.__chipClick = { trusted: e.isTrusted, prevented: e.defaultPrevented, product: a.dataset.product };
+    }, { capture: true });
+  });
   await p.focus('.hero-cta .btn-ghost');
   const seen = [];
   for (let i = 0; i < 25 && seen.length < 6; i++) {
@@ -302,10 +312,13 @@ await frameRun(390, 4);
   await p.waitForTimeout(400);
   const vis = await p.evaluate(() => getComputedStyle(document.activeElement).opacity);
   await p.screenshot({ path: `${OUT}/mode-keyboard-chip.png` });
-  let pop = null; ctx.on('page', (x) => { pop = x; });
-  await p.keyboard.press('Enter'); await p.waitForTimeout(2500);
-  const pass = seen.length === 6 && +vis > 0.9 && !!pop;
-  R.modes.push(['Keyboard chips', `${pass ? 'PASS' : 'FAIL'} reached ${seen.map((s) => s[0]).join(', ')}; focused chip opacity ${vis}; Enter opened ${pop ? pop.url().slice(0, 40) : 'nothing'}`]);
+  let pop = null; ctx.on('page', (x) => { pop = pop || x; });
+  await p.keyboard.press('Enter');
+  /* under WebGL load the popup target can be delivered seconds late: wait up to 12 s */
+  for (let i = 0; i < 24 && !pop; i++) { await p.waitForTimeout(500); }
+  const click = await p.evaluate(() => window.__chipClick);
+  const pass = seen.length === 6 && +vis > 0.9 && click && click.trusted && !click.prevented && !!pop;
+  R.modes.push(['Keyboard chips', `${pass ? 'PASS' : 'FAIL'} reached ${seen.map((s) => s[0]).join(', ')}; focused chip opacity ${vis}; Enter click trusted=${click && click.trusted} prevented=${click && click.prevented}; popup ${pop ? pop.url().slice(0, 40) : 'not observed in 12 s'}`]);
   if (!pass) fail('mode', 'keyboard chips');
   await ctx.close();
 }

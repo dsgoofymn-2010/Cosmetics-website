@@ -117,14 +117,6 @@
       true
     ],
     [
-      "vendor/gsap@3.12.5/ScrollTrigger.min.js",
-      true
-    ],
-    [
-      "vendor/lenis@1.1.14/lenis.min.js",
-      true
-    ],
-    [
       "js/i18n.js",
       true
     ],
@@ -208,7 +200,7 @@
     [
       "1440 scroll 30%",
       "min canvas margin 7.2%",
-      "min region margin -1.1%"
+      "min region margin -1.2%"
     ],
     [
       "1440 scroll 60%",
@@ -247,13 +239,13 @@
     ],
     [
       "390 scroll 30%",
-      "min canvas margin 8.1%",
-      "min region margin 8.1%"
+      "min canvas margin 8.2%",
+      "min region margin 8.2%"
     ],
     [
       "390 scroll 60%",
-      "min canvas margin 7.9%",
-      "min region margin 7.9%"
+      "min canvas margin 8.0%",
+      "min region margin 8.0%"
     ]
   ],
   "overlap": [
@@ -326,47 +318,47 @@
     [
       1440,
       "CSS background only y=450",
-      "range 20.6..21.4",
-      "worst local bump 0.26",
-      "samples 20.86 20.83 21.05 21.08 21.06 21.24 21.25 21.25 21.43"
+      "range 20.8..21.5",
+      "worst local bump 0.2",
+      "samples 20.93 20.89 20.98 21.15 21.12 21.17 21.32 21.31 21.36"
     ],
     [
       768,
       "top band y=78",
-      "range 20.4..20.8",
-      "worst local bump 0.22"
+      "range 20.3..20.7",
+      "worst local bump 0.18"
     ],
     [
       768,
       "bottom band y=960",
-      "range 22.1..25.7",
-      "worst local bump 1.78"
+      "range 22.2..25.9",
+      "worst local bump 1.76"
     ],
     [
       768,
       "CSS background only y=450",
       "range 20.5..20.9",
-      "worst local bump 0.27",
-      "samples 20.54 20.64 20.76 20.71 20.8"
+      "worst local bump 0.23",
+      "samples 20.52 20.77 20.79 20.69 20.93"
     ],
     [
       390,
       "stage top y+6",
-      "range 21.1..21.7",
-      "worst local bump 0.39"
+      "range 21.1..21.8",
+      "worst local bump 0.42"
     ],
     [
       390,
       "stage bottom y-6",
       "range 22.9..23.5",
-      "worst local bump 0.32"
+      "worst local bump 0.41"
     ],
     [
       390,
       "CSS background only y=422",
-      "range 21.9..22.6",
-      "worst local bump 0.34",
-      "samples 22.27 22.17 22.35 22.44 22.43"
+      "range 22.0..22.7",
+      "worst local bump 0.41",
+      "samples 22.11 22.25 22.26 22.35 22.49"
     ]
   ],
   "ring": [
@@ -389,16 +381,16 @@
       "cpuThrottle": 1,
       "tier": "high",
       "idle": {
-        "frames": 519,
-        "avgMs": 7.71,
-        "p95Ms": 13.8,
-        "worstMs": 14
+        "frames": 239,
+        "avgMs": 16.74,
+        "p95Ms": 17.2,
+        "worstMs": 33.3
       },
       "scroll": {
-        "frames": 514,
-        "avgMs": 7.78,
-        "p95Ms": 13.8,
-        "worstMs": 124.8
+        "frames": 220,
+        "avgMs": 18.1,
+        "p95Ms": 33,
+        "worstMs": 83.4
       }
     },
     {
@@ -406,16 +398,16 @@
       "cpuThrottle": 4,
       "tier": "low",
       "idle": {
-        "frames": 240,
-        "avgMs": 16.69,
-        "p95Ms": 62.4,
-        "worstMs": 83.6
+        "frames": 57,
+        "avgMs": 70.17,
+        "p95Ms": 149.6,
+        "worstMs": 166.7
       },
       "scroll": {
-        "frames": 60,
-        "avgMs": 66.77,
-        "p95Ms": 90.2,
-        "worstMs": 97.1
+        "frames": 54,
+        "avgMs": 75.3,
+        "p95Ms": 133.4,
+        "worstMs": 133.4
       }
     }
   ],
@@ -430,11 +422,11 @@
     ],
     [
       "Slow 3G (400 kbps, 400 ms)",
-      "PASS poster visible at 11.3 s, live scene at 40.3 s"
+      "PASS poster visible at 10.5 s, live scene at 38.8 s"
     ],
     [
       "Keyboard chips",
-      "PASS reached perfume, serum, lipstick, compact, nail-polish, cream-jar; focused chip opacity 1; Enter opened https://api.whatsapp.com/send/?phone=919"
+      "PASS reached perfume, serum, lipstick, compact, nail-polish, cream-jar; focused chip opacity 1; Enter click trusted=true prevented=false; popup https://api.whatsapp.com/send/?phone=919"
     ],
     [
       "Touch scroll over canvas",
@@ -452,17 +444,17 @@
   "network": [],
   "console": [],
   "weight": {
-    "firstLoadKB": 819,
+    "firstLoadKB": 820,
     "modelsKB": 980,
     "byTypeKB": {
-      "html": 55.4,
+      "html": 56.4,
       "fonts": 139.1,
       "images": 215.9,
       "js": 407.5,
       "other": 1.1,
       "models (after first paint)": 980
     },
-    "fcpMs": 568
+    "fcpMs": 328
   },
   "defects": []
 }

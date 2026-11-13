@@ -567,6 +567,37 @@ html.bn-js.bn-returning #heroBadge{
 .sec-sub{margin-top:18px; color:rgba(251,246,240,.78); max-width:60ch}
 
 /* ============================================================
+   Below-fold sections skip layout and paint until they near the
+   viewport: the document is ~10,800 px tall on a phone, and laying
+   all of it out at first paint cost ~285 ms of main-thread work in
+   the lab trace. Only the block size is estimated (heights measured
+   at 390 px); the inline size is left to the normal fill rules, so
+   widths stay correct while a section is skipped.
+   ============================================================ */
+.coll,.sguide,.exp,.mens,.proof,.reviews,.enquire,.visit,.ft{
+  content-visibility:auto;
+  contain-intrinsic-block-size:auto 900px;
+}
+.sguide{contain-intrinsic-block-size:auto 890px}
+.exp{contain-intrinsic-block-size:auto 1100px}
+.mens{contain-intrinsic-block-size:auto 810px}
+.proof{contain-intrinsic-block-size:auto 580px}
+.reviews{contain-intrinsic-block-size:auto 490px}
+.enquire{contain-intrinsic-block-size:auto 2270px}
+.visit{contain-intrinsic-block-size:auto 1500px}
+.ft{contain-intrinsic-block-size:auto 1180px}
+@media (min-width:1024px){
+  .sguide{contain-intrinsic-block-size:auto 620px}
+  .exp{contain-intrinsic-block-size:auto 1400px}
+  .mens{contain-intrinsic-block-size:auto 1100px}
+  .proof{contain-intrinsic-block-size:auto 490px}
+  .reviews{contain-intrinsic-block-size:auto 550px}
+  .enquire{contain-intrinsic-block-size:auto 1390px}
+  .visit{contain-intrinsic-block-size:auto 1090px}
+  .ft{contain-intrinsic-block-size:auto 790px}
+}
+
+/* ============================================================
    Collections: one snap carousel everywhere, arrows on desktop, swipe on touch
    ============================================================ */
 .coll{position:relative; padding:clamp(90px,12vh,150px) 0 0; background:var(--bg)}
@@ -1625,12 +1656,13 @@ html.lb-open{overflow:hidden}
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
-<!-- Same library versions as before, served from this site (no CDN at runtime) -->
+<!-- Same library versions as before, served from this site (no CDN at runtime).
+     ScrollTrigger and Lenis load on demand once the site is actually scrollable
+     (see initScrollFeatures below): the intro covers the page on first visit, so
+     their eval and layout work never sit on the first-paint path. -->
 <script src="vendor/three@0.128.0/three.min.js"></script>
 <script>/* the intro keeps its own r128 global; clear its version marker so the hero module does not warn */ try { delete window.__THREE__; } catch (e) {}</script>
 <script src="vendor/gsap@3.12.5/gsap.min.js"></script>
-<script src="vendor/gsap@3.12.5/ScrollTrigger.min.js"></script>
-<script src="vendor/lenis@1.1.14/lenis.min.js"></script>
 <script>
 /* ================= INTRO MODULE - brand-name cinematic, enter by button =========
    Plays once per tab. After the name lands, the venom-style wordmark button
@@ -1649,6 +1681,7 @@ html.lb-open{overflow:hidden}
     h.classList.add('bn-no-intro');
     document.body.classList.remove('intro-lock');
     h.style.overflowY = '';
+    if (window.bnLoadScrollFeatures) { try { window.bnLoadScrollFeatures(); } catch (e) {} }
     var seen = document.querySelectorAll('.rv,.rv-hold,.curtain,.rv-now');
     for (var i = 0; i < seen.length; i++) { seen[i].classList.add('in'); }
     var o = document.getElementById('intro');
@@ -1710,6 +1743,9 @@ html.lb-open{overflow:hidden}
     /* If the God Mode transition module is active, it owns the overlay removal
        and the focus management. Return early so it can take over. */
     if (html.classList.contains('bn-transition-active')) { return; }
+    /* no transition follows (skip, Esc, CSS fallback path): the site is
+       scrollable from here, so the scroll libraries can load */
+    if (window.bnLoadScrollFeatures) { try { window.bnLoadScrollFeatures(); } catch (e) {} }
     if (overlay) {
       overlay.classList.add('out');
       overlay.setAttribute('aria-hidden', 'true');
@@ -2330,6 +2366,8 @@ html.lb-open{overflow:hidden}
   function unlockAndFocus() {
     document.body.classList.remove('intro-lock');
     html.style.overflowY = '';
+    /* the site is scrollable from this moment: scroll libraries may load now */
+    if (window.bnLoadScrollFeatures) { try { window.bnLoadScrollFeatures(); } catch (e) {} }
     if (window.lenisBn && window.lenisBn.start) { try { window.lenisBn.start(); } catch (e) {} }
     if (window.ScrollTrigger && window.ScrollTrigger.refresh) {
       try { window.ScrollTrigger.refresh(); } catch (e) {}
@@ -3810,37 +3848,143 @@ html.lb-open{overflow:hidden}
   var fab = $('#fab');
   if (fab) { fab.href = waFor('enquiry'); }
 
-  /* ---------- Lenis smooth scroll (guarded) + GSAP wiring ---------- */
-  var hasGSAP = !!(window.gsap && window.ScrollTrigger);
-  var hasLenis = !!window.Lenis;
-  var lenis = null;
-  /* gentle smoothing for mouse users only; touch and reduced motion stay native */
-  if (hasLenis && !RM && FINE_POINTER && !window.bnLite) {
-    try {
-      lenis = new window.Lenis({ lerp: 0.14, smoothWheel: true });
-      html.classList.add('lenis-on');
-      if (hasGSAP) {
-        lenis.on('scroll', window.ScrollTrigger.update);
-        window.gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
-        window.gsap.ticker.lagSmoothing(0);
-      } else {
-        var raf = function (t) { lenis.raf(t); window.requestAnimationFrame(raf); };
-        window.requestAnimationFrame(raf);
-      }
-    } catch (e) { lenis = null; html.classList.remove('lenis-on'); }
-  }
+  /* ---------- Lenis smooth scroll + GSAP scroll scenes, loaded on demand ----------
+     The intro covers the page on first visit, so none of this may sit on the
+     first-paint path: ScrollTrigger's boot and trigger creation force a layout
+     pass over the whole document (~2.4 s of main-thread work under throttling).
+     Returning visitors and intro skips get the libraries right after first
+     paint; the cinematic gets them at handoff (unlockAndFocus calls bnInitScroll). */
+  var scrollInited = false;
+  function initScrollFeatures() {
+    if (scrollInited) { return; }
+    scrollInited = true;
+    var hasGSAP = !!(window.gsap && window.ScrollTrigger);
+    var hasLenis = !!window.Lenis;
+    var lenis = null;
+    /* gentle smoothing for mouse users only; touch and reduced motion stay native */
+    if (hasLenis && !RM && FINE_POINTER && !window.bnLite) {
+      try {
+        lenis = new window.Lenis({ lerp: 0.14, smoothWheel: true });
+        window.lenisBn = lenis;
+        html.classList.add('lenis-on');
+        if (hasGSAP) {
+          lenis.on('scroll', window.ScrollTrigger.update);
+          window.gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+          window.gsap.ticker.lagSmoothing(0);
+        } else {
+          var raf = function (t) { lenis.raf(t); window.requestAnimationFrame(raf); };
+          window.requestAnimationFrame(raf);
+        }
+      } catch (e) { lenis = null; html.classList.remove('lenis-on'); }
+    }
 
-  // anchor jumps go through lenis when present
-  $$('a[href^="#"]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      var id = a.getAttribute('href');
-      if (id.length < 2) { return; }
-      var el = document.querySelector(id);
-      if (!el) { return; }
-      e.preventDefault();
-      if (lenis) { lenis.scrollTo(el, { offset: -70 }); } else { el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }); }
+    // anchor jumps go through lenis when present
+    $$('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var id = a.getAttribute('href');
+        if (id.length < 2) { return; }
+        var el = document.querySelector(id);
+        if (!el) { return; }
+        e.preventDefault();
+        var live = window.lenisBn || lenis;
+        if (live) { live.scrollTo(el, { offset: -70 }); } else { el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }); }
+      });
     });
-  });
+
+    /* ---------- scroll scenes: every step guarded, content always shows ---------- */
+    function revealEverything() {
+      $$('.rv,.rv-hold,.rv-now').forEach(function (el) { el.classList.add('in'); });
+      $$('.curtain').forEach(function (c) { c.classList.add('in'); });
+    }
+    if (hasGSAP && !RM) {
+     try {
+      window.gsap.registerPlugin(window.ScrollTrigger);
+
+      // entrances: heading curtains first, then content
+      $$('.curtain').forEach(function (c) {
+        window.gsap.to(c, {
+          scrollTrigger: { trigger: c, start: 'top 88%', once: true },
+          onStart: function () { c.classList.add('in'); }
+        });
+      });
+      // hero curtains reveal immediately (they are above the fold)
+      $$('.rv-now').forEach(function (c) { window.setTimeout(function () { c.classList.add('in'); }, 400); });
+
+      // belt: anything already inside the viewport shows right away, no scroll needed
+      // (covers the locked-scroll load state and keeps content visible if a trigger races)
+      function markInviewRv() {
+        var vh = window.innerHeight;
+        $$('.rv').forEach(function (el) {
+          if (el.classList.contains('in')) { return; }
+          var r = el.getBoundingClientRect();
+          if (r.top < vh * 0.98 && r.bottom > 0) { el.classList.add('in'); }
+        });
+      }
+      markInviewRv();
+      window.addEventListener('load', markInviewRv);
+      window.setTimeout(markInviewRv, 1400);
+
+      $$('.rv').forEach(function (el) {
+        window.gsap.to(el, {
+          scrollTrigger: { trigger: el, start: 'top 90%', once: true }
+        });
+        window.ScrollTrigger.create({
+          trigger: el, start: 'top 90%', once: true,
+          onEnter: function () { el.classList.add('in'); }
+        });
+      });
+
+      // Real photos stay at their natural aspect ratio. The arch is decorative CSS,
+      // so no ScrollTrigger transform may move or enlarge the pixels.
+
+      // collections became a plain snap carousel: arrows wired further below,
+      // independent of GSAP so they work even if a scroll feature fails
+
+      // MEN outline parallax: same travel as before, but only upward, so the
+      // drift never carries the outline down into the copy below it
+      var mw = $('#mensWord');
+      var mi = $('#mensImg');
+      if (mw) {
+        window.gsap.fromTo(mw, { xPercent: -50, yPercent: 0 }, {
+          xPercent: -50, yPercent: -24, ease: 'none',
+          scrollTrigger: { trigger: '#mens', start: 'top bottom', end: 'bottom top', scrub: 0.4 }
+        });
+      }
+
+      // footer wordmark breathes
+      var fw = $('#ftWord');
+      if (fw) {
+        window.gsap.fromTo(fw, { scale: 0.94 }, {
+          scale: 1, ease: 'none',
+          scrollTrigger: { trigger: '#footer', start: 'top bottom', end: 'bottom bottom', scrub: 0.5 }
+        });
+      }
+     } catch (err) { revealEverything(); }
+    } else {
+      /* no GSAP: everything simply shows */
+      revealEverything();
+      html.classList.add('bn-no-gsap');
+    }
+    if (window.ScrollTrigger && window.ScrollTrigger.refresh) { try { window.ScrollTrigger.refresh(); } catch (e) {} }
+  }
+  window.bnInitScroll = initScrollFeatures;
+  function injectScrollLibs(done) {
+    var left = 0;
+    var step = function () { if (--left === 0) { done(); } };
+    if (!window.ScrollTrigger) { left++; var st = document.createElement('script'); st.src = 'vendor/gsap@3.12.5/ScrollTrigger.min.js'; st.onload = step; st.onerror = step; document.head.appendChild(st); }
+    if (!window.Lenis) { left++; var ln = document.createElement('script'); ln.src = 'vendor/lenis@1.1.14/lenis.min.js'; ln.onload = step; ln.onerror = step; document.head.appendChild(ln); }
+    if (left === 0) { done(); }
+  }
+  function loadScrollFeatures() {
+    if (scrollInited) { return; }
+    if (window.ScrollTrigger && window.Lenis) { initScrollFeatures(); } else { injectScrollLibs(initScrollFeatures); }
+  }
+  window.bnLoadScrollFeatures = loadScrollFeatures;
+  /* returning visitors and intro skips: the site is scrollable right now, so the
+     libraries load after first paint (idle) instead of blocking it */
+  if (html.classList.contains('bn-no-intro')) {
+    (window.requestIdleCallback || function (f) { window.setTimeout(f, 250); })(loadScrollFeatures);
+  }
 
   /* ---------- header state ---------- */
   var hd = $('#hd');
@@ -3851,80 +3995,6 @@ html.lb-open{overflow:hidden}
   window.addEventListener('scroll', onScrollHeader, { passive: true });
   onScrollHeader();
 
-  /* ---------- scroll scenes: every step guarded, content always shows ---------- */
-  function revealEverything() {
-    $$('.rv,.rv-hold,.rv-now').forEach(function (el) { el.classList.add('in'); });
-    $$('.curtain').forEach(function (c) { c.classList.add('in'); });
-  }
-  if (hasGSAP && !RM) {
-   try {
-    window.gsap.registerPlugin(window.ScrollTrigger);
-
-    // entrances: heading curtains first, then content
-    $$('.curtain').forEach(function (c) {
-      window.gsap.to(c, {
-        scrollTrigger: { trigger: c, start: 'top 88%', once: true },
-        onStart: function () { c.classList.add('in'); }
-      });
-    });
-    // hero curtains reveal immediately (they are above the fold)
-    $$('.rv-now').forEach(function (c) { window.setTimeout(function () { c.classList.add('in'); }, 400); });
-
-    // belt: anything already inside the viewport shows right away, no scroll needed
-    // (covers the locked-scroll load state and keeps content visible if a trigger races)
-    function markInviewRv() {
-      var vh = window.innerHeight;
-      $$('.rv').forEach(function (el) {
-        if (el.classList.contains('in')) { return; }
-        var r = el.getBoundingClientRect();
-        if (r.top < vh * 0.98 && r.bottom > 0) { el.classList.add('in'); }
-      });
-    }
-    markInviewRv();
-    window.addEventListener('load', markInviewRv);
-    window.setTimeout(markInviewRv, 1400);
-
-    $$('.rv').forEach(function (el) {
-      window.gsap.to(el, {
-        scrollTrigger: { trigger: el, start: 'top 90%', once: true }
-      });
-      window.ScrollTrigger.create({
-        trigger: el, start: 'top 90%', once: true,
-        onEnter: function () { el.classList.add('in'); }
-      });
-    });
-
-    // Real photos stay at their natural aspect ratio. The arch is decorative CSS,
-    // so no ScrollTrigger transform may move or enlarge the pixels.
-
-    // collections became a plain snap carousel: arrows wired further below,
-    // independent of GSAP so they work even if a scroll feature fails
-
-    // MEN outline parallax: same travel as before, but only upward, so the
-    // drift never carries the outline down into the copy below it
-    var mw = $('#mensWord');
-    var mi = $('#mensImg');
-    if (mw) {
-      window.gsap.fromTo(mw, { xPercent: -50, yPercent: 0 }, {
-        xPercent: -50, yPercent: -24, ease: 'none',
-        scrollTrigger: { trigger: '#mens', start: 'top bottom', end: 'bottom top', scrub: 0.4 }
-      });
-    }
-
-    // footer wordmark breathes
-    var fw = $('#ftWord');
-    if (fw) {
-      window.gsap.fromTo(fw, { scale: 0.94 }, {
-        scale: 1, ease: 'none',
-        scrollTrigger: { trigger: '#footer', start: 'top bottom', end: 'bottom bottom', scrub: 0.5 }
-      });
-    }
-   } catch (err) { revealEverything(); }
-  } else {
-    /* no GSAP: everything simply shows */
-    revealEverything();
-    html.classList.add('bn-no-gsap');
-  }
   /* ---------- collections carousel arrows (works with or without GSAP) ---------- */
   (function () {
     var track = $('#collTrack');
