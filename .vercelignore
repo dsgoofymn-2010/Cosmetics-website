@@ -1,0 +1,4 @@
+# QA and tooling artifacts never deploy: the upload path on flaky
+# connections kept resetting on these multi-megabyte files.
+.work/
+.lighthouse/
